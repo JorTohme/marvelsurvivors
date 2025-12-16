@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bs3mofn6fv16k"]
+
+[ext_resource type="Script" uid="uid://ykjgw35n80wl" path="res://Weapons/Axe/axe.gd" id="1_y8ten"]
+[ext_resource type="Texture2D" uid="uid://cgvwgfxf0sqsc" path="res://icon.svg" id="2_emf3m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4on80"]
+size = Vector2(125.99999, 125.000015)
+
+[node name="MeleeAttack" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_y8ten")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(129.5, 8.026786e-07)
+rotation = 1.5707964
+scale = Vector2(1, 0.2)
+shape = SubResource("RectangleShape2D_4on80")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(129.685, 0)
+rotation = 1.5707964
+scale = Vector2(1, 0.2)
+texture = ExtResource("2_emf3m")

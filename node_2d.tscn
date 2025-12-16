@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://dxudosko0ad0f"]
+
+[ext_resource type="PackedScene" uid="uid://b8yl0r20mmm34" path="res://Player/player.tscn" id="1_0e48y"]
+[ext_resource type="PackedScene" uid="uid://3nvn0q3vdyra" path="res://Enemy/enemy.tscn" id="2_epypp"]
+[ext_resource type="Script" uid="uid://ds4fcadoyko14" path="res://Enemy/enemy_spawner.gd" id="3_epypp"]
+[ext_resource type="Script" uid="uid://d2gj1df6ygoax" path="res://label.gd" id="4_0hol4"]
+[ext_resource type="Script" uid="uid://b5h1kougay4je" path="res://hud.gd" id="4_kdubu"]
+[ext_resource type="Texture2D" uid="uid://biaqbq0s8u7du" path="res://Assets/Floor/ground.jpeg" id="5_q6r6c"]
+
+[node name="World" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_0e48y")]
+position = Vector2(977, 507)
+
+[node name="EnemySpawner" type="Node2D" parent="."]
+script = ExtResource("3_epypp")
+enemy_scene = ExtResource("2_epypp")
+
+[node name="Timer" type="Timer" parent="EnemySpawner"]
+wait_time = 0.4
+autostart = true
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("4_kdubu")
+
+[node name="ProgressBar" type="ProgressBar" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 27.0
+grow_horizontal = 2
+show_percentage = false
+
+[node name="LabelLevel" type="Label" parent="HUD"]
+offset_top = 24.595
+offset_right = 40.0
+offset_bottom = 47.595036
+script = ExtResource("4_0hol4")
+metadata/_edit_use_anchors_ = true
+
+[node name="Background" type="TextureRect" parent="."]
+modulate = Color(0.33333334, 0.33333334, 0.33333334, 1)
+z_index = -10
+custom_minimum_size = Vector2(20000, 20000)
+offset_left = -477.99997
+offset_top = -627.0
+offset_right = 33033.11
+offset_bottom = 23928.555
+scale = Vector2(0.09, 0.09)
+texture = ExtResource("5_q6r6c")
+stretch_mode = 1
+
+[node name="WorldBorder" type="StaticBody2D" parent="."]
