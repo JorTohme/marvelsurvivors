@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://dujti5bowtj37"]
+
+[ext_resource type="Script" uid="uid://bmv2g7nx2r5v" path="res://Structures/Magnet/magnet_structure.gd" id="1_bf3gr"]
+[ext_resource type="Shader" uid="uid://3v6l1e0qybha" path="res://Structures/Magnet/MagnetStructure.gdshader" id="2_e8yld"]
+[ext_resource type="Texture2D" uid="uid://djjep47f77bw5" path="res://Structures/Magnet/magnet.png" id="3_tq7wu"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pkawi"]
+resource_local_to_scene = true
+shader = ExtResource("2_e8yld")
+shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_thickness = 0.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bf3gr"]
+radius = 139.01439
+
+[node name="Area2D" type="Area2D"]
+modulate = Color(0.30461073, 0.03385303, 0.035856713, 1)
+script = ExtResource("1_bf3gr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_pkawi")
+scale = Vector2(0.06, 0.06)
+texture = ExtResource("3_tq7wu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_bf3gr")

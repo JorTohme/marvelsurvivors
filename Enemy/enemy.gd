@@ -1,28 +1,33 @@
 extends CharacterBody2D
-@onready var anim_body = $Sprite
+
+@onready var anim_body = $EnemyBodySprite
 @onready var anim_shadow = $ShadowSprite
+@onready var health_bar = $HealthBar
+@onready var body_sprite = $EnemyBodySprite
 
 @export var speed = 150.0
 @export var health = 10.0
 
-@onready var health_bar = $HealthBar
-
 var player_ref = null
 var is_invulnerable: bool = true
 var is_dying: bool = false
+var is_elite: bool = false
+
+var base_color = Color.WHITE 
 
 var knockback_vector = Vector2.ZERO
 var knockback_resistance = 10.0
-
 var damage = 10
 
-var gem_scene = preload("res://exp_gem.tscn")
+var gem_scene = preload("res://ExpGem/exp_gem.tscn")
 
 func _ready():
 	player_ref = get_tree().get_first_node_in_group("player")
-	# EFECTO VISUAL: El enemigo nace medio transparente
+	
 	modulate.a = 0.5 
+	
 	await get_tree().create_timer(0.5).timeout
+	
 	is_invulnerable = false
 	modulate.a = 1.0
 	
@@ -40,9 +45,16 @@ func _physics_process(_delta):
 		move_and_slide()
 		
 		anim_body.play("run")
-		anim_shadow.play("run") 
+		anim_shadow.play("run")
 		
-		anim_body.flip_h = velocity.x < 0
+		anim_body.flip_h = direction.x < 0
+
+func make_elite():
+	is_elite = true
+	scale = Vector2(1.5, 1.5)
+	health *= 5
+	modulate = base_color
+	knockback_resistance = 100.0
 
 func take_damage(amount, source_position = null):
 	if is_invulnerable || is_dying:
@@ -56,23 +68,34 @@ func take_damage(amount, source_position = null):
 		var knockback_direction = source_position.direction_to(global_position)
 		knockback_vector = knockback_direction * 300
 	
-	modulate = Color.RED
+	#body_sprite.modulate = Color.RED
 	await get_tree().create_timer(0.1).timeout
-	modulate = Color.WHITE
+	#body_sprite.modulate = Color.WHITE
 	
 	if health <= 0:
 		die()
-	
+
 func die():
 	if is_dying: return
 	is_dying = true
-	var new_gem = gem_scene.instantiate()
-	var offset = Vector2(randf_range(-30, 30), randf_range(-30, 30))
-	new_gem.global_position = global_position + offset
-	get_tree().current_scene.call_deferred("add_child", new_gem)
+	
+	if is_elite:
+		for i in range(5):
+			spawn_gem()
+	else:
+		spawn_gem()
+	
 	queue_free()
 
+func spawn_gem():
+	var new_gem = gem_scene.instantiate()
+	
+	var offset = Vector2(randf_range(-30, 30), randf_range(-30, 30))
+	new_gem.global_position = global_position + offset
+	
+	get_tree().current_scene.call_deferred("add_child", new_gem)
+
 func _on_hitbox_body_entered(body: Node2D) -> void:
-	if body.name == "Player":
+	if body.is_in_group("player"):
 		if body.has_method("take_damage"):
-			body.take_damage(10)
+			body.take_damage(damage)

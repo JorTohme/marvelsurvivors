@@ -213,7 +213,7 @@ position = Vector2(22.555, 0)
 scale = Vector2(0.84, 0.84)
 shape = SubResource("CircleShape2D_px1sc")
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
+[node name="EnemyBodySprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 0.25490198, 0.1764706, 1)
 z_index = 5
 position = Vector2(-3.8146973e-06, -9.536743e-07)

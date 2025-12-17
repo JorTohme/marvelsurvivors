@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://b52r5nl8pula4"]
+
+[ext_resource type="Script" uid="uid://cfrb6kif6xh3d" path="res://ExpGem/exp_gem.gd" id="1_v2dn2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_b1j5s"]
+radius = 37.215588
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bnbkw"]
+load_path = "res://.godot/imported/exp_gem.png-cef7a264269f98a8214f28d90bf25dd0.ctex"
+
+[node name="ExpGem" type="Area2D" groups=["gems"]]
+collision_layer = 8
+script = ExtResource("1_v2dn2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_b1j5s")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.005, 0.005)
+texture = SubResource("CompressedTexture2D_bnbkw")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

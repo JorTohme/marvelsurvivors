@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkbrx2vv7g27p"]
+
+[ext_resource type="Texture2D" uid="uid://d3vmrb1uu4a8l" path="res://WorldProps/StoneWorldProps/rock.png" id="1_ivl3d"]
+[ext_resource type="Script" uid="uid://dbqva3l3oplcn" path="res://WorldProps/StoneWorldProps/stone_world_props.gd" id="1_ruwit"]
+
+[node name="StoneWorldProp" type="Sprite2D"]
+scale = Vector2(0.025, 0.025)
+texture = ExtResource("1_ivl3d")
+script = ExtResource("1_ruwit")

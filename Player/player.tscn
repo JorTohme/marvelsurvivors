@@ -208,7 +208,7 @@ position = Vector2(-3.8146973e-06, -9.536743e-07)
 scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_00tjw")
 animation = &"hit"
-frame_progress = 0.08261005
+frame_progress = 0.6466228
 
 [node name="ShadowSprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.7764706)

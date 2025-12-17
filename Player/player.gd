@@ -56,7 +56,6 @@ func take_damage(amount):
 		die()
 
 func die():
-	print("💀 GAME OVER")
 	get_tree().reload_current_scene()
 	
 func _unhandled_input(event):
