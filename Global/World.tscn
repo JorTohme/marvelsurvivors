@@ -1,0 +1,97 @@
+[gd_scene load_steps=15 format=3 uid="uid://dxudosko0ad0f"]
+
+[ext_resource type="PackedScene" uid="uid://b8yl0r20mmm34" path="res://Player/player.tscn" id="1_fv4w7"]
+[ext_resource type="Script" uid="uid://ds4fcadoyko14" path="res://Global/enemy_spawner.gd" id="2_fvag4"]
+[ext_resource type="PackedScene" uid="uid://3nvn0q3vdyra" path="res://Enemy/enemy.tscn" id="3_kva58"]
+[ext_resource type="Script" uid="uid://d2kuypgr8cn5k" path="res://Global/world_generator.gd" id="4_f5c0m"]
+[ext_resource type="PackedScene" uid="uid://dujti5bowtj37" path="res://Structures/Magnet/MagnetStructure.tscn" id="5_b2ar6"]
+[ext_resource type="PackedScene" uid="uid://bkbrx2vv7g27p" path="res://WorldProps/StoneWorldProps/StoneWorldProps.tscn" id="6_ee7l0"]
+[ext_resource type="Script" uid="uid://b5h1kougay4je" path="res://HUD/hud.gd" id="7_gn8l5"]
+[ext_resource type="Script" uid="uid://d2gj1df6ygoax" path="res://HUD/label.gd" id="8_6w02q"]
+[ext_resource type="Texture2D" uid="uid://biaqbq0s8u7du" path="res://Assets/Floor/ground.jpeg" id="9_1fphk"]
+[ext_resource type="Script" uid="uid://c68xru81tg52e" path="res://Global/label_timer.gd" id="9_fvag4"]
+[ext_resource type="Script" uid="uid://gxll5jpvje0f" path="res://Global/obstacle_generator.gd" id="11_kva58"]
+[ext_resource type="PackedScene" uid="uid://bekxhqonptr6x" path="res://Global/SolidBlock.tscn" id="12_f5c0m"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_f5c0m"]
+source_geometry_mode = 2
+source_geometry_group_name = &"obstaculos"
+
+[sub_resource type="LabelSettings" id="LabelSettings_fvag4"]
+line_spacing = 10.0
+font_size = 32
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+
+[node name="World" type="Node2D"]
+y_sort_enabled = true
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_f5c0m")
+
+[node name="Player" parent="NavigationRegion2D" instance=ExtResource("1_fv4w7")]
+y_sort_enabled = true
+position = Vector2(977, 507)
+speed = 200.0
+
+[node name="EnemySpawner" type="Node2D" parent="NavigationRegion2D"]
+y_sort_enabled = true
+script = ExtResource("2_fvag4")
+enemy_scene = ExtResource("3_kva58")
+
+[node name="Timer" type="Timer" parent="NavigationRegion2D/EnemySpawner"]
+autostart = true
+
+[node name="WorldGenerator" type="Node2D" parent="NavigationRegion2D"]
+y_sort_enabled = true
+script = ExtResource("4_f5c0m")
+magnet_scene = ExtResource("5_b2ar6")
+prop_scene = ExtResource("6_ee7l0")
+
+[node name="HUD" type="CanvasLayer" parent="NavigationRegion2D"]
+script = ExtResource("7_gn8l5")
+
+[node name="ProgressBar" type="ProgressBar" parent="NavigationRegion2D/HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 27.0
+grow_horizontal = 2
+show_percentage = false
+
+[node name="LabelLevel" type="Label" parent="NavigationRegion2D/HUD"]
+offset_top = 24.595
+offset_right = 40.0
+offset_bottom = 47.595036
+script = ExtResource("8_6w02q")
+metadata/_edit_use_anchors_ = true
+
+[node name="LabelTimer" type="Label" parent="NavigationRegion2D/HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 28.06
+offset_right = 34.195007
+offset_bottom = 54.09
+grow_horizontal = 2
+label_settings = SubResource("LabelSettings_fvag4")
+script = ExtResource("9_fvag4")
+
+[node name="Background" type="TextureRect" parent="NavigationRegion2D"]
+modulate = Color(0.41981313, 0.41981313, 0.41981304, 1)
+z_index = -10
+custom_minimum_size = Vector2(20000, 20000)
+offset_left = -5000.0
+offset_top = -5000.0
+offset_right = 95000.0
+offset_bottom = 95000.0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("9_1fphk")
+stretch_mode = 1
+
+[node name="WorldBorder" type="StaticBody2D" parent="NavigationRegion2D"]
+
+[node name="ObstacleGenerator" type="Node2D" parent="NavigationRegion2D" node_paths=PackedStringArray("nav_region")]
+script = ExtResource("11_kva58")
+block_scene = ExtResource("12_f5c0m")
+nav_region = NodePath("..")

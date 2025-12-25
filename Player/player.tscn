@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://brp1mm8ajj863" path="res://Player/Assets/Orc_Walk.png" id="4_gwnis"]
 [ext_resource type="PackedScene" uid="uid://b02r1e7khyw2q" path="res://Player/WeaponController.tscn" id="5_fhl08"]
 [ext_resource type="Texture2D" uid="uid://c7u8pbt0nffbb" path="res://Player/Assets/Orc-shadow.png" id="5_k53q1"]
-[ext_resource type="PackedScene" uid="uid://ctq47w4ki81ts" path="res://Weapons/Bullet/bullet.tscn" id="5_vtle1"]
+[ext_resource type="PackedScene" uid="uid://blq2e4kh76i4x" path="res://Weapons/Aura/Aura.tscn" id="9_x3vf3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o28un"]
 atlas = ExtResource("2_fhl08")
@@ -208,7 +208,7 @@ position = Vector2(-3.8146973e-06, -9.536743e-07)
 scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_00tjw")
 animation = &"hit"
-frame_progress = 0.6466228
+frame_progress = 0.9415958
 
 [node name="ShadowSprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.7764706)
@@ -231,10 +231,9 @@ position_smoothing_enabled = true
 
 [node name="Weapons" type="Node2D" parent="."]
 
-[node name="Gun" parent="Weapons" instance=ExtResource("5_fhl08")]
-projectile_scene = ExtResource("5_vtle1")
-
-[node name="Axe" parent="Weapons" instance=ExtResource("5_fhl08")]
+[node name="Aura" parent="Weapons" instance=ExtResource("5_fhl08")]
+weapon_scene = ExtResource("9_x3vf3")
+projectile_count = 1
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(60, 10)

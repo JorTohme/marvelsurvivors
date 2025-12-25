@@ -239,4 +239,6 @@ theme_override_styles/background = SubResource("StyleBoxFlat_ncf7h")
 theme_override_styles/fill = SubResource("StyleBoxFlat_m6jha")
 show_percentage = false
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]

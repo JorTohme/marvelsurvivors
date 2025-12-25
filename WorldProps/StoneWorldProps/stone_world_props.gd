@@ -10,5 +10,5 @@ func _ready():
 	
 	var random_scale = randf_range(0.10, 0.15)
 	scale = Vector2(random_scale, random_scale)
-	var brightness = randf_range(0.2, 0.4)
+	var brightness = randf_range(0.3, 0.5)
 	modulate = Color(brightness, brightness, brightness, 1)
