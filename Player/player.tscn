@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://b8yl0r20mmm34"]
+[gd_scene load_steps=35 format=3 uid="uid://b8yl0r20mmm34"]
 
 [ext_resource type="Script" uid="uid://blit2ipuo6hd" path="res://Player/player.gd" id="1_i3pqv"]
 [ext_resource type="Texture2D" uid="uid://dxyiobfunbyt" path="res://Player/Assets/Orc_Hit.png" id="2_fhl08"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://brp1mm8ajj863" path="res://Player/Assets/Orc_Walk.png" id="4_gwnis"]
 [ext_resource type="PackedScene" uid="uid://b02r1e7khyw2q" path="res://Player/WeaponController.tscn" id="5_fhl08"]
 [ext_resource type="Texture2D" uid="uid://c7u8pbt0nffbb" path="res://Player/Assets/Orc-shadow.png" id="5_k53q1"]
+[ext_resource type="Script" uid="uid://b55ajy8mmdb4p" path="res://Player/weapon_manager.gd" id="6_od3ui"]
 [ext_resource type="PackedScene" uid="uid://blq2e4kh76i4x" path="res://Weapons/Aura/Aura.tscn" id="9_x3vf3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o28un"]
@@ -230,8 +231,10 @@ process_callback = 0
 position_smoothing_enabled = true
 
 [node name="Weapons" type="Node2D" parent="."]
+script = ExtResource("6_od3ui")
+controller_scene = ExtResource("5_fhl08")
 
-[node name="Aura" parent="Weapons" instance=ExtResource("5_fhl08")]
+[node name="WeaponController" parent="Weapons" instance=ExtResource("5_fhl08")]
 weapon_scene = ExtResource("9_x3vf3")
 projectile_count = 1
 

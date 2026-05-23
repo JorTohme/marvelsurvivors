@@ -1,45 +1,24 @@
-extends Area2D
+class_name BulletWeapon
+extends BaseWeapon
 
-var is_aura: bool = true
-var is_melee: bool = false
+@export var speed: float = 600.0
+@export var lifetime: float = 1.5
 
-@export_category("Estadísticas Aura")
-@export var damage: int = 5
-@export var tick_rate: float = 1.0
+var direction: Vector2 = Vector2.RIGHT
 
-var targets_inside: Array = []
-var tick_timer: Timer
+func _init():
+	weapon_type = BaseWeapon.WeaponType.RANGED
 
 func _ready():
-	tick_timer = Timer.new()
-	tick_timer.wait_time = tick_rate
-	tick_timer.autostart = true
-	tick_timer.one_shot = false
-	add_child(tick_timer)
-	tick_timer.timeout.connect(_on_tick_damage)
-	
-	area_entered.connect(_on_area_entered)
-	area_exited.connect(_on_area_exited)
+	body_entered.connect(_on_body_entered)
+	await get_tree().create_timer(lifetime).timeout
+	if is_instance_valid(self):
+		queue_free()
 
-func _on_area_entered(area):
-	if area.has_method("take_damage"):
-		targets_inside.append(area)
-		area.take_damage(damage)
+func _physics_process(delta):
+	position += direction * speed * delta
 
-func _on_area_exited(area):
-	if area in targets_inside:
-		targets_inside.erase(area)
-
-func _on_tick_damage():
-	for i in range(targets_inside.size() - 1, -1, -1):
-		var target = targets_inside[i]
-		
-		if is_instance_valid(target):
-			target.take_damage(damage)
-		else:
-			targets_inside.remove_at(i)
-
-func level_up_aura():
-	damage += 2
-	scale *= 1.1
-	print("Aura subió de nivel! Daño: ", damage)
+func _on_body_entered(body):
+	if body.is_in_group("enemy"):
+		body.take_damage(base_damage, global_position)
+		queue_free()

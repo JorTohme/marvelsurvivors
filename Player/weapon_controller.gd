@@ -1,19 +1,18 @@
 extends Node2D
 
 @export_category("Configuración Principal")
-@export var weapon_scene: PackedScene # Aquí arrastras el Hacha, el Aura o la Bala
+@export var weapon_scene: PackedScene
 @export var cooldown: float = 1.0
 
 @export_category("Comportamiento")
 @export var projectile_count: int = 1
 
 @export_group("Ángulos y Dispersión")
-@export var manual_arc_degrees: float = 0.0 
+@export var manual_arc_degrees: float = 0.0
 @export var spread_degrees: float = 20.0
 
-var _is_melee: bool = false
-var _is_aura: bool = false
-var _aura_active_instance: Node = null
+var _weapon_type: BaseWeapon.WeaponType = BaseWeapon.WeaponType.RANGED
+var _aura_instance: BaseWeapon = null
 
 @onready var timer = $Timer
 @onready var player = get_tree().get_first_node_in_group("player")
@@ -22,95 +21,91 @@ func _ready():
 	if not weapon_scene:
 		set_process(false)
 		return
-		
-	_analyze_weapon_type()
-	
-	if _is_aura:
-		_equip_aura()
+
+	_detect_weapon_type()
+
+	if _weapon_type == BaseWeapon.WeaponType.AURA:
+		_spawn_aura()
 		timer.stop()
 	else:
 		timer.wait_time = cooldown
 		timer.timeout.connect(_on_timer_timeout)
 		timer.start()
 
-func _analyze_weapon_type():
+func _detect_weapon_type():
 	var temp = weapon_scene.instantiate()
-	
-	if "is_aura" in temp and temp.is_aura:
-		_is_aura = true
-
-	elif temp.has_method("level_up_aura"): 
-		_is_aura = true
-		
-	if "is_melee" in temp and temp.is_melee:
-		_is_melee = true
-	
+	if temp is BaseWeapon:
+		_weapon_type = temp.weapon_type
 	temp.queue_free()
 
-func _equip_aura():
-	if _aura_active_instance == null:
-		_aura_active_instance = weapon_scene.instantiate()
-		player.call_deferred("add_child", _aura_active_instance)
-		_aura_active_instance.position = Vector2.ZERO
+func _spawn_aura():
+	if _aura_instance != null:
+		return
+	_aura_instance = weapon_scene.instantiate()
+	add_child(_aura_instance)
+	_aura_instance.position = Vector2.ZERO
+
+func level_up():
+	if _weapon_type == BaseWeapon.WeaponType.AURA:
+		if _aura_instance and is_instance_valid(_aura_instance):
+			_aura_instance.level_up()
 	else:
-		if _aura_active_instance.has_method("level_up_aura"):
-			_aura_active_instance.level_up_aura()
+		cooldown = max(0.3, cooldown * 0.85)
+		timer.wait_time = cooldown
+		projectile_count = min(projectile_count + 1, 5)
 
 func _on_timer_timeout():
-	if not player: return
+	if not player:
+		return
+	var base_direction = _get_fire_direction()
+	_spawn_projectiles(base_direction)
 
-	var base_direction = Vector2.RIGHT
-	
-	if _is_melee:
+func _get_fire_direction() -> Vector2:
+	if _weapon_type == BaseWeapon.WeaponType.MELEE:
 		var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 		if input_dir.length() > 0:
-			base_direction = input_dir.normalized()
-		elif player.velocity.length() > 0:
-			base_direction = player.velocity.normalized()
-		else:
-			# Asumiendo que usas AnimatedSprite2D para la cara
-			var sprite = player.get_node_or_null("AnimatedSprite2D")
-			if sprite and sprite.flip_h: base_direction = Vector2.LEFT
-			else: base_direction = Vector2.RIGHT
+			return input_dir.normalized()
+		if player.velocity.length() > 0:
+			return player.velocity.normalized()
+		var sprite = player.get_node_or_null("AnimatedSprite2D")
+		if sprite and sprite.flip_h:
+			return Vector2.LEFT
+		return Vector2.RIGHT
 	else:
-		# Lógica Rango: Prioriza Enemigo más cercano -> Movimiento
 		var target = player.find_nearest_enemy()
 		if target:
-			base_direction = player.global_position.direction_to(target.global_position)
-		elif player.velocity.length() > 0:
-			base_direction = player.velocity.normalized()
+			return player.global_position.direction_to(target.global_position)
+		if player.velocity.length() > 0:
+			return player.velocity.normalized()
+		return Vector2.RIGHT
 
-	var current_arc_deg = manual_arc_degrees
-	if spread_degrees > 0 and projectile_count > 1:
-		current_arc_deg = spread_degrees * (projectile_count - 1)
-		current_arc_deg = min(current_arc_deg, 360) # Clamp a 360
-	
-	var arc_rad = deg_to_rad(current_arc_deg)
-	var angle_step = 0
+func _spawn_projectiles(base_direction: Vector2):
+	var arc_rad: float = _calculate_arc()
+	var angle_step: float = 0.0
 	if projectile_count > 1:
-		angle_step = arc_rad / (projectile_count if abs(current_arc_deg) >= 360 else (projectile_count - 1))
-	
-	var start_angle = -arc_rad / 2
-	
+		var divisor: int = projectile_count if abs(rad_to_deg(arc_rad)) >= 360 else (projectile_count - 1)
+		angle_step = arc_rad / divisor
+	var start_angle: float = -arc_rad / 2.0
+
 	for i in range(projectile_count):
-		var new_weapon = weapon_scene.instantiate()
-		
-		if _is_melee:
-			player.add_child(new_weapon)
+		var projectile: BaseWeapon = weapon_scene.instantiate()
+		var angle_offset: float = start_angle + (angle_step * i) if projectile_count > 1 else 0.0
+		var final_direction: Vector2 = base_direction.rotated(angle_offset)
+
+		if _weapon_type == BaseWeapon.WeaponType.MELEE:
+			player.add_child(projectile)
+			projectile.relative_rotation = angle_offset
 		else:
-			get_tree().current_scene.add_child(new_weapon)
-			new_weapon.global_position = player.global_position
-		
-		var current_angle_offset = 0
-		if projectile_count > 1:
-			current_angle_offset = start_angle + (angle_step * i)
-		
-		var final_direction = base_direction.rotated(current_angle_offset)
-		
-		if "direction" in new_weapon:
-			new_weapon.direction = final_direction
-		
-		new_weapon.rotation = final_direction.angle()
-		
-		if _is_melee and "relative_rotation" in new_weapon:
-			new_weapon.relative_rotation = current_angle_offset
+			get_tree().current_scene.add_child(projectile)
+			projectile.global_position = player.global_position
+
+		if "direction" in projectile:
+			projectile.direction = final_direction
+		projectile.rotation = final_direction.angle()
+
+func _calculate_arc() -> float:
+	var deg := manual_arc_degrees
+	if spread_degrees > 0 and projectile_count > 1:
+		deg = spread_degrees * (projectile_count - 1)
+		deg = min(deg, 360.0)
+	return deg_to_rad(deg)

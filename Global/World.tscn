@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dxudosko0ad0f"]
+[gd_scene load_steps=17 format=3 uid="uid://dxudosko0ad0f"]
 
 [ext_resource type="PackedScene" uid="uid://b8yl0r20mmm34" path="res://Player/player.tscn" id="1_fv4w7"]
 [ext_resource type="Script" uid="uid://ds4fcadoyko14" path="res://Global/enemy_spawner.gd" id="2_fvag4"]
@@ -12,6 +12,8 @@
 [ext_resource type="Script" uid="uid://c68xru81tg52e" path="res://Global/label_timer.gd" id="9_fvag4"]
 [ext_resource type="Script" uid="uid://gxll5jpvje0f" path="res://Global/obstacle_generator.gd" id="11_kva58"]
 [ext_resource type="PackedScene" uid="uid://bekxhqonptr6x" path="res://Global/SolidBlock.tscn" id="12_f5c0m"]
+[ext_resource type="Script" uid="uid://cc61dsguqcrss" path="res://HUD/upgrade_screen.gd" id="13_koqk4"]
+[ext_resource type="Script" uid="uid://bhxhhiwr6or1y" path="res://HUD/game_over_screen.gd" id="14_thxhw"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_f5c0m"]
 source_geometry_mode = 2
@@ -95,3 +97,9 @@ stretch_mode = 1
 script = ExtResource("11_kva58")
 block_scene = ExtResource("12_f5c0m")
 nav_region = NodePath("..")
+
+[node name="UpgradeScreen" type="CanvasLayer" parent="."]
+script = ExtResource("13_koqk4")
+
+[node name="GameOverScreen" type="CanvasLayer" parent="."]
+script = ExtResource("14_thxhw")

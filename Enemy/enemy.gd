@@ -112,7 +112,7 @@ func spawn_gem():
 
 func attack_player():
 	if player_touching and player_touching.has_method("take_damage"):
-		player_touching.take_damage(damage)
+		player_touching.take_damage(damage, global_position)
 
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):

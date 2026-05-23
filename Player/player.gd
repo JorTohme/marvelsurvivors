@@ -3,6 +3,13 @@ extends CharacterBody2D
 @export var speed = 300.0
 @export var health = 100.0
 
+const KNOCKBACK_STRENGTH: float = 450.0
+const KNOCKBACK_FRICTION: float = 1800.0
+const IFRAMES_DURATION: float = 0.5
+
+var is_invulnerable: bool = false
+var knockback_velocity: Vector2 = Vector2.ZERO
+
 @onready var camera = $Camera2D
 @onready var anim_body = $Sprite
 @onready var anim_shadow = $ShadowSprite
@@ -20,7 +27,8 @@ func _ready():
 
 func _physics_process(_delta):
 	var direction = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	velocity = direction * speed
+	velocity = direction * speed + knockback_velocity
+	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, KNOCKBACK_FRICTION * _delta)
 	move_and_slide()
 	
 	var anim_name = "idle"
@@ -43,20 +51,41 @@ func find_nearest_enemy():
 			closest_enemy = enemy
 	return closest_enemy
 	
-func take_damage(amount):
-	health -= amount
+func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO):
+	if is_invulnerable:
+		return
 
+	health -= amount
 	health_bar.value = health
 	health_bar.visible = true
-	modulate = Color.RED
-	await get_tree().create_timer(0.1).timeout
-	modulate = Color.WHITE
-	
+
+	if source_position != Vector2.ZERO:
+		knockback_velocity = source_position.direction_to(global_position) * KNOCKBACK_STRENGTH
+
 	if health <= 0:
 		die()
+		return
+
+	is_invulnerable = true
+	_flicker()
+	await get_tree().create_timer(IFRAMES_DURATION).timeout
+	if is_instance_valid(self):
+		is_invulnerable = false
+		modulate = Color.WHITE
+
+func _flicker() -> void:
+	modulate = Color(1, 0.2, 0.2)
+	var tween := create_tween().set_trans(Tween.TRANS_SINE)
+	for _i in range(5):
+		tween.tween_property(self, "modulate:a", 0.2, 0.05)
+		tween.tween_property(self, "modulate:a", 1.0, 0.05)
 
 func die():
-	get_tree().reload_current_scene()
+	var screen = get_tree().get_first_node_in_group("game_over_screen")
+	if screen:
+		screen.show_game_over(Global.get_time_elapsed())
+	else:
+		get_tree().reload_current_scene()
 	
 func _unhandled_input(event):
 	if event is InputEventMouseButton and event.pressed:
