@@ -49,14 +49,16 @@ WeaponManager      — Orquesta MÚLTIPLES WeaponControllers
 | Arma: Bala (ranged) | ✅ Completo |
 | WeaponController refactorizado | ✅ Completo |
 | WeaponManager (múltiples armas) | ✅ Completo |
-| UI de selección de upgrades | ❌ Pendiente |
+| UI de selección de upgrades | ✅ Completo |
+| Sistema de tomos (stats del jugador) | ✅ Completo |
+| Pantalla de Game Over | ✅ Completo |
+| Menú principal | 🔧 En progreso |
 | Personajes Marvel (assets) | ❌ Pendiente |
 | Más armas temáticas Marvel | ❌ Pendiente |
-| Pantalla de Game Over | ❌ Pendiente |
-| Menú principal | ❌ Pendiente |
 | Sonido y música | ❌ Pendiente |
 | Enemigos temáticos Marvel | ❌ Pendiente |
-| Condición de victoria | ❌ Pendiente |
+| Condición de victoria | ➖ No aplica (juego infinito) |
+| Horda especial al minuto 10 | ❌ Pendiente |
 
 ---
 
@@ -72,7 +74,7 @@ WeaponManager      — Orquesta MÚLTIPLES WeaponControllers
 
 ---
 
-### FASE 2 — UI de Progresión (próxima)
+### FASE 2 — UI de Progresión (completado)
 
 - [ ] Crear `UpgradeScreen` — overlay que pausa el juego al subir de nivel
 - [ ] Generar 3 opciones aleatorias de upgrade en cada nivel
@@ -91,6 +93,30 @@ WeaponManager      — Orquesta MÚLTIPLES WeaponControllers
 | `bullet` | Rayos de Iron Man | RANGED | Disparos que apuntan al enemigo más cercano |
 | *(futuras)* | Flechas de Ojo de Halcón | RANGED | Múltiples proyectiles en abanico |
 | *(futuras)* | Telaraña | MELEE | Ralentiza y daña enemigos cercanos |
+
+---
+
+### FASE 2b — Sistema de Tomos (completado)
+
+- [x] Agregar stats del jugador a `Global`: `damage_multiplier`, `quantity_bonus`, `knockback_multiplier`, `size_multiplier`
+- [x] `Global.apply_tome(id)` — incrementa el stat correspondiente y emite `stats_changed`
+- [x] `Global.reset()` — resetea todos los stats + XP + tiempo entre runs
+- [x] `BaseWeapon._ready()` conecta `stats_changed` → `_on_stats_changed()` virtual
+- [x] `AuraWeapon` — aplica `size_multiplier` al diámetro; `damage_multiplier` al daño; ignora quantity y knockback
+- [x] `AxeWeapon` / `BulletWeapon` — aplican `size_multiplier` (scale), `damage_multiplier` y `knockback_multiplier` al disparar
+- [x] `WeaponController` — `projectile_count + Global.quantity_bonus` al spawnear (AURA no llega a este path)
+- [x] `enemy.take_damage(amount, knockback: Vector2)` — API cambiada, knockback es vector directo
+
+**Tomos disponibles:**
+
+| ID | Stat | Incremento | Aplica a |
+|---|---|---|---|
+| `damage` | `damage_multiplier` | +10% | Todas |
+| `quantity` | `quantity_bonus` | +1 proyectil | MELEE, RANGED |
+| `knockback` | `knockback_multiplier` | +25% | MELEE, RANGED |
+| `size` | `size_multiplier` | +20% | Todas |
+
+**Para agregar un tomo nuevo:** solo llamar `Global.apply_tome("id")` y definir el incremento en el `match` de `global.gd`.
 
 ---
 

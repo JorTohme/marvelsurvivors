@@ -54,5 +54,6 @@ func show_game_over(survived_seconds: float):
 	show()
 
 func _on_retry():
+	Global.reset()
 	get_tree().paused = false
 	get_tree().reload_current_scene()

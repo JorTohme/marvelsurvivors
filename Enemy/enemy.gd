@@ -75,20 +75,17 @@ func make_elite():
 	modulate = base_color
 	knockback_resistance = 100.0
 
-func take_damage(amount, source_position = null):
+func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO):
 	if is_invulnerable || is_dying:
 		return
-	
+
 	health -= amount
 	health_bar.value = health
 	health_bar.visible = true
-	
-	if source_position != null:
-		var knockback_direction = source_position.direction_to(global_position)
-		knockback_vector = knockback_direction * 300
-	
+	knockback_vector = knockback
+
 	await get_tree().create_timer(0.1).timeout
-	
+
 	if health <= 0:
 		die()
 

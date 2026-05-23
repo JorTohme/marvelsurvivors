@@ -4,6 +4,8 @@ extends BaseWeapon
 @export var diameter: float = 500.0
 @export var attack_cooldown: float = 0.5
 
+var _base_diameter: float
+
 var aura_color_fill := Color(0.283, 0.661, 0.887, 0.2)
 var aura_color_border := Color(0.2, 0.584, 0.839, 1.0)
 
@@ -11,8 +13,13 @@ func _init():
 	weapon_type = BaseWeapon.WeaponType.AURA
 
 func _ready():
+	_base_diameter = diameter
+	super._ready()
 	$Timer.wait_time = attack_cooldown
 	$Timer.timeout.connect(_on_timer_timeout)
+
+func _on_stats_changed() -> void:
+	diameter = _base_diameter * Global.size_multiplier
 	_update_size()
 
 func _process(delta):
@@ -37,11 +44,11 @@ func _update_size():
 func _on_timer_timeout():
 	for body in get_overlapping_bodies():
 		if body.is_in_group("enemy"):
-			body.take_damage(base_damage, body.global_position)
+			body.take_damage(base_damage * Global.damage_multiplier)
 
 func level_up():
 	base_damage += 2.0
-	diameter += 30.0
+	_base_diameter += 30.0
 	attack_cooldown = max(0.1, attack_cooldown * 0.9)
 	$Timer.wait_time = attack_cooldown
-	_update_size()
+	_on_stats_changed()

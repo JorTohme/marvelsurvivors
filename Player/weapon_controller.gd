@@ -80,16 +80,17 @@ func _get_fire_direction() -> Vector2:
 		return Vector2.RIGHT
 
 func _spawn_projectiles(base_direction: Vector2):
-	var arc_rad: float = _calculate_arc()
+	var count := projectile_count + Global.quantity_bonus
+	var arc_rad: float = _calculate_arc(count)
 	var angle_step: float = 0.0
-	if projectile_count > 1:
-		var divisor: int = projectile_count if abs(rad_to_deg(arc_rad)) >= 360 else (projectile_count - 1)
+	if count > 1:
+		var divisor: int = count if abs(rad_to_deg(arc_rad)) >= 360 else (count - 1)
 		angle_step = arc_rad / divisor
 	var start_angle: float = -arc_rad / 2.0
 
-	for i in range(projectile_count):
+	for i in range(count):
 		var projectile: BaseWeapon = weapon_scene.instantiate()
-		var angle_offset: float = start_angle + (angle_step * i) if projectile_count > 1 else 0.0
+		var angle_offset: float = start_angle + (angle_step * i) if count > 1 else 0.0
 		var final_direction: Vector2 = base_direction.rotated(angle_offset)
 
 		if _weapon_type == BaseWeapon.WeaponType.MELEE:
@@ -103,9 +104,9 @@ func _spawn_projectiles(base_direction: Vector2):
 			projectile.direction = final_direction
 		projectile.rotation = final_direction.angle()
 
-func _calculate_arc() -> float:
+func _calculate_arc(count: int) -> float:
 	var deg := manual_arc_degrees
-	if spread_degrees > 0 and projectile_count > 1:
-		deg = spread_degrees * (projectile_count - 1)
+	if spread_degrees > 0 and count > 1:
+		deg = spread_degrees * (count - 1)
 		deg = min(deg, 360.0)
 	return deg_to_rad(deg)

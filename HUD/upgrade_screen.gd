@@ -21,6 +21,29 @@ const WEAPON_DATA: Dictionary = {
 	},
 }
 
+const TOME_DATA: Dictionary = {
+	"damage": {
+		"name": "Tomo de Daño",
+		"description": "+10% daño\na todas las armas.",
+		"color": Color(0.9, 0.2, 0.2),
+	},
+	"quantity": {
+		"name": "Tomo de Cantidad",
+		"description": "+1 proyectil\n(no aplica al Aura).",
+		"color": Color(0.2, 0.8, 0.3),
+	},
+	"knockback": {
+		"name": "Tomo de Knockback",
+		"description": "+25% empuje\n(no aplica al Aura).",
+		"color": Color(0.9, 0.5, 0.1),
+	},
+	"size": {
+		"name": "Tomo de Tamaño",
+		"description": "+20% tamaño\na todas las armas.",
+		"color": Color(0.7, 0.2, 0.9),
+	},
+}
+
 var _weapon_manager: WeaponManager = null
 
 func _ready():
@@ -31,12 +54,20 @@ func _ready():
 
 func _on_leveled_up():
 	_weapon_manager = get_tree().get_first_node_in_group("weapon_manager")
-	var options: Array = WEAPON_DATA.keys()
-	options.shuffle()
-	options = options.slice(0, min(3, options.size()))
-	_show_cards(options)
 
-func _show_cards(weapon_ids: Array):
+	var pool: Array = []
+
+	for weapon_id in WEAPON_DATA:
+		if _weapon_manager == null or not _weapon_manager.has_weapon(weapon_id):
+			pool.append({ "type": "weapon", "id": weapon_id })
+
+	for tome_id in TOME_DATA:
+		pool.append({ "type": "tome", "id": tome_id })
+
+	pool.shuffle()
+	_show_cards(pool.slice(0, min(3, pool.size())))
+
+func _show_cards(options: Array):
 	get_tree().paused = true
 
 	for child in get_children():
@@ -64,14 +95,16 @@ func _show_cards(weapon_ids: Array):
 	hbox.add_theme_constant_override("separation", 30)
 	add_child(hbox)
 
-	for weapon_id in weapon_ids:
-		hbox.add_child(_create_card(weapon_id))
+	for option in options:
+		hbox.add_child(_create_card(option))
 
 	show()
 
-func _create_card(weapon_id: String) -> Control:
-	var data: Dictionary = WEAPON_DATA[weapon_id]
-	var already_have: bool = _weapon_manager != null and _weapon_manager.has_weapon(weapon_id)
+func _create_card(option: Dictionary) -> Control:
+	var is_weapon: bool = option["type"] == "weapon"
+	var id: String = option["id"]
+	var data: Dictionary = WEAPON_DATA[id] if is_weapon else TOME_DATA[id]
+	var already_have := is_weapon and _weapon_manager != null and _weapon_manager.has_weapon(id)
 
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(260, 280)
@@ -99,15 +132,18 @@ func _create_card(weapon_id: String) -> Control:
 
 	var btn := Button.new()
 	btn.text = "MEJORAR" if already_have else "OBTENER"
-	btn.pressed.connect(func(): _on_card_selected(weapon_id))
+	btn.pressed.connect(func(): _on_card_selected(option))
 	vbox.add_child(btn)
 
 	return panel
 
-func _on_card_selected(weapon_id: String):
-	if _weapon_manager:
-		var scene: PackedScene = load(WEAPON_DATA[weapon_id]["scene_path"])
-		_weapon_manager.add_weapon(weapon_id, scene)
+func _on_card_selected(option: Dictionary):
+	if option["type"] == "weapon":
+		if _weapon_manager:
+			var scene: PackedScene = load(WEAPON_DATA[option["id"]]["scene_path"])
+			_weapon_manager.add_weapon(option["id"], scene)
+	else:
+		Global.apply_tome(option["id"])
 
 	for child in get_children():
 		child.queue_free()
