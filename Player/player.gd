@@ -58,6 +58,7 @@ func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO):
 	health -= amount
 	health_bar.value = health
 	health_bar.visible = true
+	AudioManager.play_sfx("player_hit")
 
 	if source_position != Vector2.ZERO:
 		knockback_velocity = source_position.direction_to(global_position) * KNOCKBACK_STRENGTH
@@ -68,10 +69,18 @@ func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO):
 
 	is_invulnerable = true
 	_flicker()
+	_shake_camera()
 	await get_tree().create_timer(IFRAMES_DURATION).timeout
 	if is_instance_valid(self):
 		is_invulnerable = false
 		modulate = Color.WHITE
+
+func _shake_camera() -> void:
+	var tween := create_tween()
+	for i in range(5):
+		tween.tween_property(camera, "offset",
+			Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0)), 0.05)
+	tween.tween_property(camera, "offset", Vector2.ZERO, 0.05)
 
 func _flicker() -> void:
 	modulate = Color(1, 0.2, 0.2)

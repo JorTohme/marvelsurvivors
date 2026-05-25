@@ -25,6 +25,7 @@ var player_touching = null
 var time_until_next_damage = 0.0
 
 var gem_scene = preload("res://ExpGem/exp_gem.tscn")
+var _dmg_num_script = preload("res://HUD/damage_number.gd")
 
 func _ready():
 	player_ref = get_tree().get_first_node_in_group("player")
@@ -75,7 +76,7 @@ func make_elite():
 	modulate = base_color
 	knockback_resistance = 100.0
 
-func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO):
+func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO, is_crit: bool = false):
 	if is_invulnerable || is_dying:
 		return
 
@@ -83,6 +84,8 @@ func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO):
 	health_bar.value = health
 	health_bar.visible = true
 	knockback_vector = knockback
+	_spawn_damage_number(amount, is_crit)
+	AudioManager.play_sfx("hit")
 
 	await get_tree().create_timer(0.1).timeout
 
@@ -92,6 +95,7 @@ func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO):
 func die():
 	if is_dying: return
 	is_dying = true
+	AudioManager.play_sfx("enemy_die")
 	
 	if is_elite:
 		for i in range(5):
@@ -100,6 +104,13 @@ func die():
 		spawn_gem()
 	
 	queue_free()
+
+func _spawn_damage_number(amount: float, is_crit: bool = false) -> void:
+	var lbl := Label.new()
+	lbl.set_script(_dmg_num_script)
+	get_tree().current_scene.add_child(lbl)
+	lbl.global_position = global_position + Vector2(randf_range(-15.0, 15.0), -50.0)
+	lbl.setup(int(amount), is_crit)
 
 func spawn_gem():
 	var new_gem = gem_scene.instantiate()

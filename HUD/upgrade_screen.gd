@@ -57,8 +57,11 @@ func _on_leveled_up():
 
 	var pool: Array = []
 
+	var active_count := _weapon_manager.get_active_weapon_ids().size() if _weapon_manager else 0
+	var can_add_weapon := active_count < 3
+
 	for weapon_id in WEAPON_DATA:
-		if _weapon_manager == null or not _weapon_manager.has_weapon(weapon_id):
+		if can_add_weapon and (_weapon_manager == null or not _weapon_manager.has_weapon(weapon_id)):
 			pool.append({ "type": "weapon", "id": weapon_id })
 
 	for tome_id in TOME_DATA:

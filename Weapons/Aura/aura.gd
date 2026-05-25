@@ -44,7 +44,9 @@ func _update_size():
 func _on_timer_timeout():
 	for body in get_overlapping_bodies():
 		if body.is_in_group("enemy"):
-			body.take_damage(base_damage * Global.damage_multiplier)
+			var is_crit := Global.roll_crit()
+			var dmg := base_damage * Global.damage_multiplier * (2.0 if is_crit else 1.0)
+			body.take_damage(dmg, Vector2.ZERO, is_crit)
 
 func level_up():
 	base_damage += 2.0

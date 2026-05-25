@@ -1,20 +1,11 @@
 extends Label
 
-@export var total_time: float = 600.0
-
-var time_left: float
-
-func _ready():
-	time_left = total_time
-
 func _process(_delta):
-	var t = Global.time_left
-	var minutes = floor(t / 60)
-	var seconds = int(t) % 60
-	text = "%02d:%02d" % [minutes, seconds]
-
-func _update_text_display():
-	var minutes = floor(time_left / 60)
-
-	var seconds = int(time_left) % 60
-	text = "%02d:%02d" % [minutes, seconds]
+	if Global.time_left > 0:
+		var t := int(Global.time_left)
+		text = "%02d:%02d" % [t / 60, t % 60]
+		modulate = Color.WHITE
+	else:
+		var t := int(Global.overtime)
+		text = "+%02d:%02d" % [t / 60, t % 60]
+		modulate = Color(1.0, 0.85, 0.0)

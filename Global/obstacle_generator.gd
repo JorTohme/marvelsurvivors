@@ -27,12 +27,13 @@ func _ready():
 
 func setup_navigation_floor():
 	var new_poly = NavigationPolygon.new()
-	
+
+	var nav_half: float = Global.MAP_HALF_SIZE + 500
 	var outline = PackedVector2Array([
-		Vector2(map_limit_x.x - 500, map_limit_y.x - 500),
-		Vector2(map_limit_x.y + 500, map_limit_y.x - 500),
-		Vector2(map_limit_x.y + 500, map_limit_y.y + 500),
-		Vector2(map_limit_x.x - 500, map_limit_y.y + 500)
+		Vector2(-nav_half, -nav_half),
+		Vector2( nav_half, -nav_half),
+		Vector2( nav_half,  nav_half),
+		Vector2(-nav_half,  nav_half),
 	])
 	
 	new_poly.add_outline(outline)

@@ -7,6 +7,15 @@ var _weapons: Dictionary = {}
 
 func _ready():
 	add_to_group("weapon_manager")
+	_register_existing_controllers()
+
+func _register_existing_controllers() -> void:
+	for child in get_children():
+		var scene: PackedScene = child.get("weapon_scene")
+		if scene == null:
+			continue
+		var id := scene.resource_path.get_file().get_basename().to_lower()
+		_weapons[id] = child
 
 func add_weapon(weapon_id: String, weapon_scene: PackedScene, config: Dictionary = {}) -> void:
 	if _weapons.has(weapon_id):

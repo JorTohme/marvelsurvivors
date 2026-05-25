@@ -25,5 +25,7 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	if body.is_in_group("enemy"):
 		var kb := global_position.direction_to(body.global_position) * 300.0 * Global.knockback_multiplier
-		body.take_damage(base_damage * Global.damage_multiplier, kb)
+		var is_crit := Global.roll_crit()
+		var dmg := base_damage * Global.damage_multiplier * (2.0 if is_crit else 1.0)
+		body.take_damage(dmg, kb, is_crit)
 		queue_free()
