@@ -10,7 +10,7 @@ var current_xp: int = 0
 var next_level_xp: int = 100
 
 # --- MUNDO ---
-const MAP_HALF_SIZE: int = 2000
+const MAP_HALF_SIZE: int = 10000
 
 # --- SISTEMA DE TIEMPO ---
 var total_time: float = 600.0 # 10 minutos

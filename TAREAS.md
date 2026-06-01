@@ -133,9 +133,9 @@ WeaponManager      — Orquesta MÚLTIPLES WeaponControllers
 ### FASE 4 — Pantallas y Flujo de Juego
 
 - [ ] **Menú Principal** — botones: Jugar, Salir; logo del juego
-- [ ] **Pantalla de Game Over** — tiempo sobrevivido, nivel alcanzado, reintentar
+- [x] **Pantalla de Game Over** — tiempo sobrevivido, nivel alcanzado, reintentar
 - [ ] **Pantalla de Victoria** — si el jugador sobrevive 10 minutos
-- [ ] Transiciones entre escenas (fade in/out)
+- [x] Transiciones entre escenas (fade in/out)
 
 ---
 

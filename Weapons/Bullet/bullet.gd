@@ -29,3 +29,5 @@ func _on_body_entered(body):
 		var dmg := base_damage * Global.damage_multiplier * (2.0 if is_crit else 1.0)
 		body.take_damage(dmg, kb, is_crit)
 		queue_free()
+	elif body.is_in_group("obstaculos"):
+		queue_free()

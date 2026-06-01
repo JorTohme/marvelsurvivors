@@ -75,12 +75,12 @@ func take_damage(amount: float, source_position: Vector2 = Vector2.ZERO):
 		is_invulnerable = false
 		modulate = Color.WHITE
 
-func _shake_camera() -> void:
+func _shake_camera(intensity: float = 6.0, duration_step: float = 0.05, iterations: int = 5) -> void:
 	var tween := create_tween()
-	for i in range(5):
+	for i in range(iterations):
 		tween.tween_property(camera, "offset",
-			Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0)), 0.05)
-	tween.tween_property(camera, "offset", Vector2.ZERO, 0.05)
+			Vector2(randf_range(-intensity, intensity), randf_range(-intensity, intensity)), duration_step)
+	tween.tween_property(camera, "offset", Vector2.ZERO, duration_step)
 
 func _flicker() -> void:
 	modulate = Color(1, 0.2, 0.2)

@@ -76,6 +76,13 @@ func make_elite():
 	modulate = base_color
 	knockback_resistance = 100.0
 
+func make_runner():
+	scale = Vector2(0.35, 0.35) # El base era 0.6, lo bajamos casi a la mitad
+	health = 10.0 # Menos vida (muere de 1 o 2 golpes)
+	speed = 260.0 # Más rápido aún
+	knockback_resistance = 2.0 # Sale volando más fácil
+	modulate = Color(1.0, 0.6, 0.6) # Los teñimos un poco de rojo para que destaquen
+
 func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO, is_crit: bool = false):
 	if is_invulnerable || is_dying:
 		return
@@ -86,6 +93,11 @@ func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO, is_crit: bool
 	knockback_vector = knockback
 	_spawn_damage_number(amount, is_crit)
 	AudioManager.play_sfx("hit")
+	
+	if is_crit:
+		var player = get_tree().get_first_node_in_group("player")
+		if player and player.has_method("_shake_camera"):
+			player._shake_camera(4.0, 0.03, 3)
 
 	await get_tree().create_timer(0.1).timeout
 

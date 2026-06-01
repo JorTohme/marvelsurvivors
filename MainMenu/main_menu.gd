@@ -1,12 +1,17 @@
 extends CanvasLayer
 
+var bg: TextureRect
+
 func _ready():
 	layer = 0
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-	var bg := ColorRect.new()
-	bg.color = Color(0.05, 0.05, 0.1)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg = TextureRect.new()
+	bg.texture = load("res://Assets/Enviroment/grass19.png")
+	bg.stretch_mode = TextureRect.STRETCH_TILE
+	bg.size = Vector2(4000, 4000)
+	bg.scale = Vector2(2, 2)
+	bg.modulate = Color(0.4, 0.4, 0.4, 1.0) # Oscurecemos un poco para que resalte el texto
 	add_child(bg)
 
 	var center := CenterContainer.new()
@@ -41,9 +46,17 @@ func _ready():
 	btn_quit.pressed.connect(_on_quit)
 	vbox.add_child(btn_quit)
 
+func _process(delta):
+	if bg and bg.texture:
+		bg.position += Vector2(-50, -50) * delta
+		var w = bg.texture.get_width() * bg.scale.x
+		var h = bg.texture.get_height() * bg.scale.y
+		if bg.position.x <= -w: bg.position.x += w
+		if bg.position.y <= -h: bg.position.y += h
+
 func _on_play():
 	Global.reset()
-	get_tree().change_scene_to_file("res://Global/World.tscn")
+	SceneTransition.change_scene_to_file("res://Global/World.tscn")
 
 func _on_quit():
 	get_tree().quit()
