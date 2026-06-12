@@ -10,6 +10,9 @@ const IFRAMES_DURATION: float = 0.5
 var is_invulnerable: bool = false
 var knockback_velocity: Vector2 = Vector2.ZERO
 var max_health: float = 100.0
+var regen_accumulator: float = 0.0
+
+var _dmg_num_script = preload("res://HUD/damage_number.gd")
 
 # Dash
 var dashes_available: int = 1
@@ -35,13 +38,19 @@ const CAMERA_SHAKE_ITERATIONS: int = 5
 
 
 func _ready():
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.2, 0.8, 0.2)
+	health_bar.add_theme_stylebox_override("fill", style)
+	
 	Global.stats_changed.connect(_on_stats_changed)
 	_on_stats_changed()
 
 func _on_stats_changed():
 	var new_max_health = 100.0 + (Global.items.get("dirty_bandage", 0) * 10.0)
 	if new_max_health > max_health:
-		health += (new_max_health - max_health)
+		var burst = new_max_health - max_health
+		health += burst
+		_spawn_heal_number(int(burst))
 	max_health = new_max_health
 	health_bar.max_value = max_health
 	health_bar.value = health
@@ -89,8 +98,15 @@ func _physics_process(_delta):
 
 	var total_regen = Global.hp_regen + (Global.items.get("copper_amulet", 0) * 0.2)
 	if total_regen > 0 and health > 0 and health < max_health and not Global.items.has("blood_pact"):
-		health = min(health + (total_regen * _delta), max_health)
+		var tick_heal = total_regen * _delta
+		health = min(health + tick_heal, max_health)
 		health_bar.value = health
+		
+		regen_accumulator += tick_heal
+		if regen_accumulator >= 1.0:
+			var int_heal = int(regen_accumulator)
+			regen_accumulator -= int_heal
+			_spawn_heal_number(int_heal)
 
 func find_nearest_enemy():
 	var enemies = get_tree().get_nodes_in_group("enemy")
@@ -105,8 +121,18 @@ func find_nearest_enemy():
 
 func heal(amount: float):
 	if health > 0 and health < max_health:
-		health = min(health + amount, max_health)
+		var actual_heal = min(amount, max_health - health)
+		health += actual_heal
 		health_bar.value = health
+		if actual_heal >= 1.0:
+			_spawn_heal_number(int(actual_heal))
+
+func _spawn_heal_number(amount: int) -> void:
+	var lbl := Label.new()
+	lbl.set_script(_dmg_num_script)
+	get_tree().current_scene.add_child(lbl)
+	lbl.global_position = global_position + Vector2(randf_range(-15.0, 15.0), -40.0)
+	lbl.setup(amount, false, true)
 	
 func take_damage(amount: float, source_node: Node2D = null):
 	if is_invulnerable:
@@ -146,7 +172,7 @@ func take_damage(amount: float, source_node: Node2D = null):
 	await get_tree().create_timer(total_iframes).timeout
 	if is_instance_valid(self):
 		is_invulnerable = false
-		modulate = Color.WHITE
+		anim_body.modulate = Color.WHITE
 
 func _shake_camera(intensity: float = CAMERA_SHAKE_INTENSITY, duration_step: float = CAMERA_SHAKE_DURATION, iterations: int = CAMERA_SHAKE_ITERATIONS) -> void:
 	var tween := create_tween()
@@ -156,19 +182,19 @@ func _shake_camera(intensity: float = CAMERA_SHAKE_INTENSITY, duration_step: flo
 	tween.tween_property(camera, "offset", Vector2.ZERO, duration_step)
 
 func _flicker() -> void:
-	modulate = Color(1, 0.2, 0.2)
+	anim_body.modulate = Color(1, 0.2, 0.2)
 	var tween := create_tween().set_trans(Tween.TRANS_SINE)
 	for _i in range(5):
-		tween.tween_property(self, "modulate:a", 0.2, 0.05)
-		tween.tween_property(self, "modulate:a", 1.0, 0.05)
+		tween.tween_property(anim_body, "modulate:a", 0.2, 0.05)
+		tween.tween_property(anim_body, "modulate:a", 1.0, 0.05)
 
 func die():
 	set_physics_process(false)
 	is_invulnerable = true
 	
 	var tween = create_tween().set_trans(Tween.TRANS_SINE)
-	tween.tween_property(self, "modulate:a", 0.0, 1.0)
-	tween.parallel().tween_property(self, "scale", Vector2.ZERO, 1.0)
+	tween.tween_property(anim_body, "modulate:a", 0.0, 1.0)
+	tween.parallel().tween_property(anim_body, "scale", Vector2.ZERO, 1.0)
 	await tween.finished
 	
 	var screen = get_tree().get_first_node_in_group("game_over_screen")

@@ -31,7 +31,7 @@ var jump_distance: float = 1.0
 var crit_chance: float = 0.01
 var attack_speed_multiplier: float = 1.0
 var luck: float = 0.0
-var hp_regen: float = 0.0
+var hp_regen: float = 0.2
 
 # --- SISTEMA DE ORO Y COFRES ---
 var gold: int = 0
@@ -135,7 +135,7 @@ func reset() -> void:
 	crit_chance = 0.01
 	luck = 0.0
 	attack_speed_multiplier = 1.0
-	hp_regen = 0.0
+	hp_regen = 0.2
 	acquired_tomes.clear()
 	gold = 0
 	chests_opened = 0

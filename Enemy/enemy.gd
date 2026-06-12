@@ -60,6 +60,10 @@ func _ready():
 	is_invulnerable = false
 	modulate.a = 1.0
 	
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.8, 0.2, 0.2)
+	health_bar.add_theme_stylebox_override("fill", style)
+	
 	health_bar.max_value = health
 	health_bar.value = health
 	health_bar.visible = false

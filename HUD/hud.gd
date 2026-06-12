@@ -34,7 +34,7 @@ func _ready():
 	
 	_gold_label = Label.new()
 	_gold_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	_gold_label.position = Vector2(-200, 20)
+	_gold_label.position = Vector2(-200, 50)
 	_gold_label.add_theme_font_size_override("font_size", 24)
 	_gold_label.add_theme_color_override("font_color", Color(1.0, 0.84, 0.0))
 	add_child(_gold_label)
