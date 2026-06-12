@@ -28,9 +28,15 @@ func _ready():
 		_spawn_aura()
 		timer.stop()
 	else:
-		timer.wait_time = cooldown
+		Global.stats_changed.connect(_update_cooldown)
+		_update_cooldown()
 		timer.timeout.connect(_on_timer_timeout)
 		timer.start()
+
+func _update_cooldown():
+	if _weapon_type != BaseWeapon.WeaponType.AURA:
+		var bonus_as = 1.0 + (Global.items.get("whetstone", 0) * 0.03)
+		timer.wait_time = max(0.1, cooldown / (Global.attack_speed_multiplier * bonus_as))
 
 func _detect_weapon_type():
 	var temp = weapon_scene.instantiate()
@@ -51,7 +57,7 @@ func level_up():
 			_aura_instance.level_up()
 	else:
 		cooldown = max(0.3, cooldown * 0.85)
-		timer.wait_time = cooldown
+		_update_cooldown()
 		projectile_count = min(projectile_count + 1, 5)
 
 func _on_timer_timeout():
@@ -80,7 +86,35 @@ func _get_fire_direction() -> Vector2:
 		return Vector2.RIGHT
 
 func _spawn_projectiles(base_direction: Vector2):
-	var count := projectile_count + Global.quantity_bonus
+	var count: int = int(floor(projectile_count + Global.quantity_bonus + Global.items.get("backpack", 0)))
+	
+	var temp: BaseWeapon = weapon_scene.instantiate()
+	var is_line = false
+	var delay = 0.1
+	if temp and "spawn_in_line" in temp:
+		is_line = temp.spawn_in_line
+		delay = temp.line_spacing_delay
+	temp.queue_free()
+
+	if is_line:
+		for i in range(count):
+			var projectile: BaseWeapon = weapon_scene.instantiate()
+			if _weapon_type == BaseWeapon.WeaponType.MELEE:
+				player.add_child(projectile)
+				projectile.relative_rotation = 0.0
+			else:
+				get_tree().current_scene.add_child(projectile)
+				if is_instance_valid(player):
+					projectile.global_position = player.global_position
+
+			if "direction" in projectile:
+				projectile.direction = base_direction
+			projectile.rotation = base_direction.angle()
+			
+			if i < count - 1:
+				await get_tree().create_timer(delay).timeout
+		return
+
 	var arc_rad: float = _calculate_arc(count)
 	var angle_step: float = 0.0
 	if count > 1:
@@ -98,7 +132,8 @@ func _spawn_projectiles(base_direction: Vector2):
 			projectile.relative_rotation = angle_offset
 		else:
 			get_tree().current_scene.add_child(projectile)
-			projectile.global_position = player.global_position
+			if is_instance_valid(player):
+				projectile.global_position = player.global_position
 
 		if "direction" in projectile:
 			projectile.direction = final_direction

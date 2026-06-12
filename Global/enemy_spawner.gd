@@ -27,8 +27,8 @@ func _on_timer_timeout():
 		var group_center = get_smart_spawn_position(player, min_dist, max_dist)
 		
 		var minute = Global.get_current_minute()
-		var min_enemies = 1 + minute
-		var max_enemies = 3 + int(minute * 1.5)
+		var min_enemies = 1 + int(minute * 0.5)
+		var max_enemies = 1 + minute
 		
 		if is_close_spawn:
 			max_enemies = max(1, int(max_enemies / 2))

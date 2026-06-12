@@ -5,9 +5,10 @@ var xp_amount: int = 5
 @onready var collision = $CollisionShape2D
 
 var is_collected = false
-var is_chasing = false
+var time_alive = 0.0
 var target_body = null
 var speed = 0.0
+var is_chasing = false
 
 func _ready():
 	randomize_gem()
@@ -15,16 +16,21 @@ func _ready():
 
 func randomize_gem():
 	var roll = randf()
+	var minute = Global.get_current_minute() if Global.has_method("get_current_minute") else 0
+	var xp_multiplier = 1.0 + (minute * 0.5) # +50% XP por cada minuto
 	
 	if roll < 0.75:
-		xp_amount = 5
+		xp_amount = int(5 * xp_multiplier)
 		modulate = Color.CYAN
 	elif roll < 0.90:
-		xp_amount = 8
+		xp_amount = int(8 * xp_multiplier)
 		modulate = Color.VIOLET
 	else:
-		xp_amount = 10
+		xp_amount = int(10 * xp_multiplier)
 		modulate = Color.GOLD
+
+	var magnet_range = 1.0 + (Global.items.get("magnet_ring", 0) * 0.15)
+	collision.scale = Vector2(magnet_range, magnet_range)
 
 func animate_spawn():
 	collision.set_deferred("disabled", true)
@@ -45,15 +51,22 @@ func animate_spawn():
 	
 	get_tree().create_timer(0.3).timeout.connect(func(): collision.set_deferred("disabled", false))
 
-func _physics_process(delta):
+func _process(delta):
+	time_alive += delta
+	
 	if is_chasing and is_instance_valid(target_body):
 		var direction = global_position.direction_to(target_body.global_position)
 		speed += 1500 * delta
-		
 		global_position += direction * speed * delta
-		
 		if global_position.distance_to(target_body.global_position) < 15:
 			finish_collection()
+	else:
+		if time_alive > 10.0 and Global.items.has("overloaded_magnet"):
+			var player = get_tree().get_first_node_in_group("player")
+			if player:
+				# Vuelan despacito hacia vos
+				var dir = global_position.direction_to(player.global_position)
+				global_position += dir * 150 * delta
 
 func _on_body_entered(body):
 	if is_collected: return

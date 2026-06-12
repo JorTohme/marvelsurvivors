@@ -19,7 +19,9 @@ func _ready():
 	$Timer.timeout.connect(_on_timer_timeout)
 
 func _on_stats_changed() -> void:
-	diameter = _base_diameter * Global.size_multiplier
+	if _base_diameter == 0.0: return
+	var total_size = Global.size_multiplier * (1.0 + Global.items.get("magic_yeast", 0) * 0.05)
+	diameter = _base_diameter * total_size
 	_update_size()
 
 func _process(delta):
@@ -45,7 +47,7 @@ func _on_timer_timeout():
 	for body in get_overlapping_bodies():
 		if body.is_in_group("enemy"):
 			var is_crit := Global.roll_crit()
-			var dmg := base_damage * Global.damage_multiplier * (2.0 if is_crit else 1.0)
+			var dmg := get_total_damage(is_crit)
 			body.take_damage(dmg, Vector2.ZERO, is_crit)
 
 func level_up():

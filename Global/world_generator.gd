@@ -2,6 +2,7 @@ extends Node2D
 
 @export var magnet_scene: PackedScene
 @export var prop_scene: PackedScene
+@export var chest_scene: PackedScene
 @export var amount: int = 1000 # Escaldo para el mapa de 20k x 20k
 
 func _ready():
@@ -48,6 +49,12 @@ func generate_world():
 		var magnet = magnet_scene.instantiate()
 		magnet.position = Vector2(randf_range(-half, half), randf_range(-half, half))
 		add_child(magnet)
+
+	if chest_scene:
+		for i in range(50):
+			var chest = chest_scene.instantiate()
+			chest.position = Vector2(randf_range(-half, half), randf_range(-half, half))
+			add_child(chest)
 
 func _spawn_grass_patches(half: float) -> void:
 	var patch_textures = [

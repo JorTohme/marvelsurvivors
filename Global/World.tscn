@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dxudosko0ad0f"]
+[gd_scene load_steps=20 format=3 uid="uid://dxudosko0ad0f"]
 
 [ext_resource type="PackedScene" uid="uid://b8yl0r20mmm34" path="res://Player/player.tscn" id="1_fv4w7"]
 [ext_resource type="Script" uid="uid://ds4fcadoyko14" path="res://Global/enemy_spawner.gd" id="2_fvag4"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dujti5bowtj37" path="res://Structures/Magnet/MagnetStructure.tscn" id="5_b2ar6"]
 [ext_resource type="PackedScene" uid="uid://bkbrx2vv7g27p" path="res://WorldProps/StoneWorldProps/StoneWorldProps.tscn" id="6_ee7l0"]
 [ext_resource type="Script" uid="uid://b5h1kougay4je" path="res://HUD/hud.gd" id="7_gn8l5"]
+[ext_resource type="PackedScene" uid="uid://cnb5chest123" path="res://Structures/Chest/chest.tscn" id="7_rer2n"]
 [ext_resource type="Script" uid="uid://d2gj1df6ygoax" path="res://HUD/label.gd" id="8_6w02q"]
 [ext_resource type="Texture2D" uid="uid://b7bd5cw25pfln" path="res://Assets/Enviroment/grass19.png" id="9_1fphk"]
 [ext_resource type="Script" uid="uid://c68xru81tg52e" path="res://Global/label_timer.gd" id="9_fvag4"]
@@ -14,6 +15,8 @@
 [ext_resource type="PackedScene" uid="uid://bekxhqonptr6x" path="res://Global/SolidBlock.tscn" id="12_f5c0m"]
 [ext_resource type="Script" uid="uid://cc61dsguqcrss" path="res://HUD/upgrade_screen.gd" id="13_koqk4"]
 [ext_resource type="Script" uid="uid://bhxhhiwr6or1y" path="res://HUD/game_over_screen.gd" id="14_thxhw"]
+[ext_resource type="PackedScene" path="res://HUD/chest_screen.tscn" id="16_qb57p"]
+[ext_resource type="PackedScene" path="res://HUD/pause_screen.tscn" id="17_qb57p"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_f5c0m"]
 source_geometry_mode = 2
@@ -29,11 +32,11 @@ outline_color = Color(0, 0, 0, 1)
 y_sort_enabled = true
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+y_sort_enabled = true
 navigation_polygon = SubResource("NavigationPolygon_f5c0m")
 
 [node name="Player" parent="NavigationRegion2D" instance=ExtResource("1_fv4w7")]
 y_sort_enabled = true
-position = Vector2(0, 0)
 speed = 200.0
 
 [node name="EnemySpawner" type="Node2D" parent="NavigationRegion2D"]
@@ -49,6 +52,7 @@ y_sort_enabled = true
 script = ExtResource("4_f5c0m")
 magnet_scene = ExtResource("5_b2ar6")
 prop_scene = ExtResource("6_ee7l0")
+chest_scene = ExtResource("7_rer2n")
 
 [node name="HUD" type="CanvasLayer" parent="NavigationRegion2D"]
 script = ExtResource("7_gn8l5")
@@ -84,8 +88,6 @@ z_index = -10
 custom_minimum_size = Vector2(20000, 20000)
 offset_left = -15000.0
 offset_top = -15000.0
-offset_right = 0.0
-offset_bottom = 0.0
 scale = Vector2(2, 2)
 texture = ExtResource("9_1fphk")
 stretch_mode = 1
@@ -93,6 +95,7 @@ stretch_mode = 1
 [node name="WorldBorder" type="StaticBody2D" parent="NavigationRegion2D"]
 
 [node name="ObstacleGenerator" type="Node2D" parent="NavigationRegion2D" node_paths=PackedStringArray("nav_region")]
+y_sort_enabled = true
 script = ExtResource("11_kva58")
 block_scene = ExtResource("12_f5c0m")
 nav_region = NodePath("..")
@@ -102,3 +105,7 @@ script = ExtResource("13_koqk4")
 
 [node name="GameOverScreen" type="CanvasLayer" parent="."]
 script = ExtResource("14_thxhw")
+
+[node name="ChestScreen" parent="." instance=ExtResource("16_qb57p")]
+
+[node name="PauseScreen" parent="." instance=ExtResource("17_qb57p")]

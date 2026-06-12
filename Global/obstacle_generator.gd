@@ -144,7 +144,7 @@ func place_block(pos: Vector2, tex: Texture2D):
 		
 	var sprite = Sprite2D.new()
 	sprite.texture = tex
-	sprite.position = Vector2(32, 32) 
+	sprite.position = Vector2(0, -32) 
 	sprite.scale = Vector2(2.5, 2.5) 
 	
 	# Usamos Nearest with Mipmaps para que al hacer zoom out (achicar la imagen) no "vibre" o "brille" (aliasing)

@@ -19,6 +19,13 @@ const WEAPON_DATA: Dictionary = {
 		"color": Color(1.0, 0.75, 0.1),
 		"scene_path": "res://Weapons/Bullet/Bullet.tscn",
 	},
+	"arrow": {
+		"name": "Arco",
+		"description": "Dispara flechas en abanico.",
+		"color": Color(0.8, 1.0, 0.2),
+		"scene_path": "res://Weapons/Arrow/arrow.tscn",
+		"config": { "projectile_count": 1 },
+	},
 }
 
 const TOME_DATA: Dictionary = {
@@ -41,6 +48,26 @@ const TOME_DATA: Dictionary = {
 		"name": "Tomo de Tamaño",
 		"description": "+20% tamaño\na todas las armas.",
 		"color": Color(0.7, 0.2, 0.9),
+	},
+	"luck": {
+		"name": "Tomo de Suerte",
+		"description": "+1 Suerte\n(mejores rarezas).",
+		"color": Color(0.8, 0.9, 0.2),
+	},
+	"attack_speed": {
+		"name": "Tomo de Velocidad",
+		"description": "+20% velocidad de ataque\n(no aplica al Aura).",
+		"color": Color(0.1, 0.8, 0.9),
+	},
+	"regen": {
+		"name": "Tomo de Vitalidad",
+		"description": "+1 PV/s de\nregeneración de vida.",
+		"color": Color(0.9, 0.2, 0.6),
+	},
+	"proj_speed": {
+		"name": "Tomo de Rapidez",
+		"description": "+25% veloc. de proyectil\n(solo proyectiles).",
+		"color": Color(0.3, 1.0, 0.6),
 	},
 }
 
@@ -65,10 +92,30 @@ func _on_leveled_up():
 			pool.append({ "type": "weapon", "id": weapon_id })
 
 	for tome_id in TOME_DATA:
+		if Global.acquired_tomes.size() >= 5 and not Global.acquired_tomes.has(tome_id):
+			continue
 		pool.append({ "type": "tome", "id": tome_id })
 
 	pool.shuffle()
-	_show_cards(pool.slice(0, min(3, pool.size())))
+	var selected_options = pool.slice(0, min(3, pool.size()))
+	
+	for opt in selected_options:
+		if opt["type"] == "tome":
+			opt["rarity"] = _roll_rarity()
+			
+	_show_cards(selected_options)
+
+func _roll_rarity() -> Dictionary:
+	var total_luck = Global.luck + (Global.items.get("old_horseshoe", 0) * 2.0)
+	var roll = randf_range(0.0, 100.0 + (total_luck * 10.0))
+	if roll < 51.0:
+		return {"name": "Común", "mult": 1.0, "color": Color(0.6, 0.6, 0.6)}
+	elif roll < 81.0:
+		return {"name": "Raro", "mult": 1.2, "color": Color(0.2, 0.4, 0.8)}
+	elif roll < 96.0:
+		return {"name": "Épico", "mult": 1.5, "color": Color(0.6, 0.2, 0.8)}
+	else:
+		return {"name": "Legendario", "mult": 2.0, "color": Color(1.0, 0.8, 0.1)}
 
 func _show_cards(options: Array):
 	get_tree().paused = true
@@ -110,6 +157,15 @@ func _create_card(option: Dictionary) -> Control:
 	var already_have := is_weapon and _weapon_manager != null and _weapon_manager.has_weapon(id)
 
 	var panel := PanelContainer.new()
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.15, 0.15, 0.15)
+	if not is_weapon and option.has("rarity"):
+		style.border_color = option["rarity"]["color"]
+		style.border_width_bottom = 4
+		style.border_width_top = 4
+		style.border_width_left = 4
+		style.border_width_right = 4
+	panel.add_theme_stylebox_override("panel", style)
 	panel.custom_minimum_size = Vector2(260, 280)
 
 	var vbox := VBoxContainer.new()
@@ -122,13 +178,42 @@ func _create_card(option: Dictionary) -> Control:
 	vbox.add_child(icon)
 
 	var name_label := Label.new()
-	name_label.text = data["name"]
+	if is_weapon:
+		name_label.text = data["name"]
+	else:
+		name_label.text = option["rarity"]["name"] + " " + data["name"]
+		name_label.add_theme_color_override("font_color", option["rarity"]["color"])
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.add_theme_font_size_override("font_size", 18)
 	vbox.add_child(name_label)
 
 	var desc_label := Label.new()
-	desc_label.text = data["description"]
+	var desc_text: String = data["description"]
+	
+	if not is_weapon and option.has("rarity"):
+		var mult: float = option["rarity"]["mult"]
+		match id:
+			"damage":
+				desc_text = "+%d%% daño\na todas las armas." % round(10 * mult)
+			"quantity":
+				var q = 1.0 * mult
+				desc_text = ("+%d proyectil(es)\n(no aplica al Aura)." % int(q)) if q == floor(q) else ("+%.1f proyectil(es)\n(no aplica al Aura)." % q)
+			"knockback":
+				desc_text = "+%d%% empuje\n(no aplica al Aura)." % round(25 * mult)
+			"size":
+				desc_text = "+%d%% tamaño\na todas las armas." % round(20 * mult)
+			"luck":
+				var l = 1.0 * mult
+				desc_text = ("+%d Suerte\n(mejores rarezas)." % int(l)) if l == floor(l) else ("+%.1f Suerte\n(mejores rarezas)." % l)
+			"attack_speed":
+				desc_text = "+%d%% velocidad de ataque\n(no aplica al Aura)." % round(20 * mult)
+			"regen":
+				var r = 1.0 * mult
+				desc_text = ("+%d PV/s de\nregeneración de vida." % int(r)) if r == floor(r) else ("+%.1f PV/s de\nregeneración de vida." % r)
+			"proj_speed":
+				desc_text = "+%d%% veloc. de proyectil\n(solo proyectiles)." % round(25 * mult)
+
+	desc_label.text = desc_text
 	desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	vbox.add_child(desc_label)
@@ -143,10 +228,13 @@ func _create_card(option: Dictionary) -> Control:
 func _on_card_selected(option: Dictionary):
 	if option["type"] == "weapon":
 		if _weapon_manager:
-			var scene: PackedScene = load(WEAPON_DATA[option["id"]]["scene_path"])
-			_weapon_manager.add_weapon(option["id"], scene)
+			var w_data: Dictionary = WEAPON_DATA[option["id"]]
+			var scene: PackedScene = load(w_data["scene_path"])
+			var config: Dictionary = w_data.get("config", {})
+			_weapon_manager.add_weapon(option["id"], scene, config)
 	else:
-		Global.apply_tome(option["id"])
+		var mult = option["rarity"]["mult"] if option.has("rarity") else 1.0
+		Global.apply_tome(option["id"], mult)
 
 	for child in get_children():
 		child.queue_free()

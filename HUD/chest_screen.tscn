@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxchestscr123"]
+
+[ext_resource type="Script" path="res://HUD/chest_screen.gd" id="1_scr"]
+
+[node name="ChestScreen" type="CanvasLayer"]
+process_mode = 3
+layer = 15
+script = ExtResource("1_scr")

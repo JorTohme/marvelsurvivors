@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b02r1e7khyw2q" path="res://Player/WeaponController.tscn" id="5_fhl08"]
 [ext_resource type="Texture2D" uid="uid://c7u8pbt0nffbb" path="res://Player/Assets/Orc-shadow.png" id="5_k53q1"]
 [ext_resource type="Script" uid="uid://b55ajy8mmdb4p" path="res://Player/weapon_manager.gd" id="6_od3ui"]
-[ext_resource type="PackedScene" uid="uid://blq2e4kh76i4x" path="res://Weapons/Aura/Aura.tscn" id="9_x3vf3"]
+[ext_resource type="PackedScene" uid="uid://ctq47w4ki81ts" path="res://Weapons/Bullet/bullet.tscn" id="9_x3vf3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o28un"]
 atlas = ExtResource("2_fhl08")
@@ -198,13 +198,11 @@ bg_color = Color(0.07577705, 0.00015972208, 9.024516e-09, 1)
 bg_color = Color(0.7059392, 3.5376102e-06, 3.85046e-07, 1)
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
-z_index = 5
 scale = Vector2(0.6, 0.6)
 collision_mask = 12
 script = ExtResource("1_i3pqv")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-z_index = 5
 position = Vector2(-3.8146973e-06, -9.536743e-07)
 scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_00tjw")
@@ -213,8 +211,8 @@ frame_progress = 0.9415958
 
 [node name="ShadowSprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.7764706)
-z_index = 4
 position = Vector2(0, 7.93)
+z_index = -1
 scale = Vector2(3.655, 3.655)
 sprite_frames = SubResource("SpriteFrames_o28un")
 animation = &"run"

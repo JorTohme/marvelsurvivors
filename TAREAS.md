@@ -159,12 +159,12 @@ WeaponManager      — Orquesta MÚLTIPLES WeaponControllers
 
 ### FASE 7 — Polish
 
-- [ ] Partículas de impacto en enemigos
+- [x] Partículas de impacto en enemigos
 - [ ] Screen shake al recibir daño
-- [ ] Números de daño flotantes
-- [ ] Estandarizar comentarios en un solo idioma (español)
-- [ ] Reemplazar magic numbers con constantes/exports
-- [ ] Refactor: pantalla de muerte del jugador con animación
+- [x] Números de daño flotantes
+- [x] Estandarizar comentarios en un solo idioma (español)
+- [x] Reemplazar magic numbers con constantes/exports
+- [x] Refactor: pantalla de muerte del jugador con animación
 
 ---
 

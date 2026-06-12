@@ -215,7 +215,6 @@ shape = SubResource("CircleShape2D_px1sc")
 
 [node name="EnemyBodySprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 0.25490198, 0.1764706, 1)
-z_index = 5
 position = Vector2(-3.8146973e-06, -9.536743e-07)
 scale = Vector2(5, 5)
 sprite_frames = SubResource("SpriteFrames_nmr1a")
@@ -223,8 +222,8 @@ animation = &"hit"
 
 [node name="ShadowSprite" type="AnimatedSprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.7764706)
-z_index = 4
 position = Vector2(0, 7.93)
+z_index = -1
 scale = Vector2(3.655, 3.655)
 sprite_frames = SubResource("SpriteFrames_47ove")
 animation = &"idle"
