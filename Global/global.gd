@@ -36,6 +36,7 @@ var hp_regen: float = 0.2
 # --- SISTEMA DE ORO Y COFRES ---
 var gold: int = 0
 var chests_opened: int = 0
+var first_elite_killed: bool = false
 var items: Dictionary = {}
 
 func add_gold(amount: int) -> void:
@@ -139,4 +140,5 @@ func reset() -> void:
 	acquired_tomes.clear()
 	gold = 0
 	chests_opened = 0
+	first_elite_killed = false
 	items.clear()

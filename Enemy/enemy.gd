@@ -26,6 +26,10 @@ var is_invulnerable: bool = true
 var is_dying: bool = false
 var is_elite: bool = false
 var is_runner: bool = false
+var is_caster: bool = false
+var is_casting: bool = false
+var cast_cooldown: float = 4.0
+var cast_timer: float = 2.0
 
 var base_color = Color.WHITE 
 
@@ -38,6 +42,8 @@ var time_until_next_damage = 0.0
 var nav_timer = 0.0
 
 var gem_scene = preload("res://ExpGem/exp_gem.tscn")
+var chest_scene = preload("res://Structures/Chest/chest.tscn")
+var explosion_scene = preload("res://Enemy/caster_explosion.tscn")
 var _dmg_num_script = preload("res://HUD/damage_number.gd")
 
 func _ready():
@@ -48,10 +54,16 @@ func _ready():
 	
 	if is_elite:
 		health = (BASE_ELITE_HEALTH + minute * HEALTH_PER_MINUTE_ELITE) * 5
+		speed += minute * 5.0
 	elif is_runner:
 		health = BASE_RUNNER_HEALTH + (minute * HEALTH_PER_MINUTE_RUNNER)
+		speed += minute * 10.0
+	elif is_caster:
+		health = BASE_HEALTH * 0.8 + (minute * HEALTH_PER_MINUTE * 0.8)
+		speed += minute * 4.0
 	else:
 		health = BASE_HEALTH + (minute * HEALTH_PER_MINUTE)
+		speed += minute * 8.0
 		
 	modulate.a = 0.5 
 	
@@ -69,25 +81,33 @@ func _ready():
 	health_bar.visible = false
 
 func _physics_process(delta):
-	if player_ref && !is_invulnerable:
-		nav_timer -= delta
-		if nav_timer <= 0:
-			nav_agent.target_position = player_ref.global_position
-			nav_timer = randf_range(0.3, 0.6) # Recalcula cada 0.3-0.6 segundos
+	if player_ref && !is_invulnerable && !is_dying:
+		if is_caster and not is_casting:
+			cast_timer -= delta
+			var dist = global_position.distance_to(player_ref.global_position)
+			if cast_timer <= 0 and dist < 450.0:
+				_start_cast()
+				
+		if is_casting:
+			velocity = knockback_vector
+		else:
+			nav_timer -= delta
+			if nav_timer <= 0:
+				nav_agent.target_position = player_ref.global_position
+				nav_timer = randf_range(0.3, 0.6)
+				
+			var next_path_pos = nav_agent.get_next_path_position()
+			var direction = global_position.direction_to(next_path_pos)
 			
-		var next_path_pos = nav_agent.get_next_path_position()
-		var direction = global_position.direction_to(next_path_pos)
-		
-		velocity = direction * speed
-		velocity += knockback_vector
+			velocity = direction * speed
+			velocity += knockback_vector
+			
+			anim_body.play("run")
+			anim_shadow.play("run")
+			anim_body.flip_h = direction.x < 0
+			
 		knockback_vector = knockback_vector.move_toward(Vector2.ZERO, knockback_resistance)
-		
 		move_and_slide()
-		
-		anim_body.play("run")
-		anim_shadow.play("run")
-		
-		anim_body.flip_h = direction.x < 0
 	
 	if player_touching:
 		var dist = global_position.distance_to(player_touching.global_position)
@@ -111,6 +131,26 @@ func make_runner():
 	speed = 260.0 # Aumentamos la velocidad
 	knockback_resistance = 2.0 # Reducimos la resistencia para que salga volando más fácil
 	modulate = Color(1.0, 0.6, 0.6) # Color rojizo para destacar visualmente
+
+func make_caster():
+	is_caster = true
+	modulate = Color(0.8, 0.2, 0.9) # Violeta oscuro
+	speed = 85.0
+	knockback_resistance = 15.0
+
+func _start_cast():
+	is_casting = true
+	cast_timer = cast_cooldown
+	anim_body.play("idle")
+	anim_shadow.play("idle")
+	
+	var explosion = explosion_scene.instantiate()
+	explosion.global_position = player_ref.global_position
+	get_tree().current_scene.add_child(explosion)
+	
+	await get_tree().create_timer(0.6).timeout
+	if is_instance_valid(self):
+		is_casting = false
 
 func take_damage(amount: float, knockback: Vector2 = Vector2.ZERO, is_crit: bool = false, is_static_chain: bool = false):
 	if is_invulnerable || is_dying:
@@ -148,6 +188,13 @@ func die():
 		Global.add_gold(15)
 		for i in range(5):
 			spawn_gem()
+			
+		if not Global.first_elite_killed:
+			Global.first_elite_killed = true
+			var golden_chest = chest_scene.instantiate()
+			golden_chest.global_position = global_position
+			golden_chest.is_golden = true
+			get_tree().current_scene.call_deferred("add_child", golden_chest)
 	else:
 		Global.add_gold(2)
 		spawn_gem()

@@ -40,6 +40,11 @@ func _on_timer_timeout():
 		if Global.get_time_elapsed() > 30.0 and randf() < 0.3:
 			is_runner_group = true
 			group_size += 2 # Los corredores vienen en grupos un poco más grandes
+			
+		# Después de 60 segundos, hay chance de que el grupo sea de casters
+		var is_caster_group = false
+		if Global.get_time_elapsed() > 60.0 and randf() < 0.2 and not is_runner_group:
+			is_caster_group = true
 		
 		for i in range(group_size):
 			var new_enemy = enemy_scene.instantiate()
@@ -65,6 +70,8 @@ func _on_timer_timeout():
 				new_enemy.make_elite()
 			elif is_runner_group:
 				new_enemy.make_runner()
+			elif is_caster_group:
+				new_enemy.make_caster()
 			
 			get_tree().current_scene.add_child(new_enemy)
 			

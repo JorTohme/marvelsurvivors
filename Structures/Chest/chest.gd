@@ -6,9 +6,14 @@ extends Area2D
 var player_in_range = false
 var is_open = false
 
+@export var is_golden: bool = false
+
 func _ready():
 	prompt_label.visible = false
 	prompt_label.text = ""
+	
+	if is_golden:
+		sprite.modulate = Color(1.0, 0.84, 0.0) # Color dorado brillante
 	
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
@@ -18,16 +23,16 @@ func _process(_delta):
 		return
 		
 	if player_in_range:
-		var cost = Global.get_chest_cost()
-		prompt_label.text = str(cost) + " Oro"
+		var cost = 0 if is_golden else Global.get_chest_cost()
+		prompt_label.text = "¡Gratis!" if is_golden else str(cost) + " Oro"
 		
 		if Input.is_key_pressed(KEY_E):
 			_try_open_chest(cost)
 
 func _try_open_chest(cost: int):
-	var is_free = randf() < (Global.items.get("broken_lockpick", 0) * 0.01)
+	var is_free_lockpick = randf() < (Global.items.get("broken_lockpick", 0) * 0.01)
 	
-	if is_free or Global.spend_gold(cost):
+	if is_golden or is_free_lockpick or Global.spend_gold(cost):
 		is_open = true
 		Global.chests_opened += 1
 		prompt_label.visible = false

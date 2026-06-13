@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Proyecto: Marvelous Survivors</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f4f4;
+            --surface-color: #ffffff;
+            --primary-color: #e63946;
+            --secondary-color: #1d3557;
+            --text-color: #333333;
+            --text-muted: #666666;
+            --border-color: #cccccc;
+            
+            --tier-common: #808080;
+            --tier-rare: #007bff;
+            --tier-epic: #6f42c1;
+            --tier-legendary: #ff8c00;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+
+        .card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.3rem;
+            margin-top: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .item-box {
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            border-left: 5px solid var(--text-muted);
+        }
+
+        /* Tiers */
+        .tier-common { border-left-color: var(--tier-common); }
+        .tier-rare { border-left-color: var(--tier-rare); }
+        .tier-epic { border-left-color: var(--tier-epic); }
+        .tier-legendary { border-left-color: var(--tier-legendary); }
+
+        .tier-badge {
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 5px;
+            border: 1px solid;
+        }
+        
+        .badge-common { color: var(--tier-common); border-color: var(--tier-common); }
+        .badge-rare { color: var(--tier-rare); border-color: var(--tier-rare); }
+        .badge-epic { color: var(--tier-epic); border-color: var(--tier-epic); }
+        .badge-legendary { color: var(--tier-legendary); border-color: var(--tier-legendary); }
+
+        .item-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 0 0 5px 0;
+            color: var(--secondary-color);
+        }
+
+        .item-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        code {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            color: var(--primary-color);
+        }
+        
+        .asset-img {
+            max-width: 64px;
+            image-rendering: pixelated;
+            vertical-align: middle;
+            margin-right: 15px;
+        }
+        
+        .flex-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Galería de Assets */
+        .asset-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 15px;
+            margin-bottom: 30px;
+        }
+
+        .asset-item {
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .gallery-img {
+            max-width: 100px;
+            max-height: 100px;
+            image-rendering: pixelated;
+            margin-bottom: 10px;
+        }
+
+        .asset-name {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="flex-header">
+            <img src="Player/Assets/Orc_Idle.png" alt="Jugador" class="asset-img" style="transform: scale(2);">
+            <h1>Marvelous Survivors</h1>
+        </div>
+        <p>Reporte de Arquitectura, Mecánicas y Contenido Mantenible</p>
+    </header>
+
+    <div class="card">
+        <h2>🛠️ Core y Arquitectura</h2>
+        <p>El juego está construido sobre un <strong>Bucle de Supervivencia</strong> clásico estilo <em>Vampire Survivors</em>, pero fuertemente impulsado por un sistema de escalado procedural y un gestor dinámico de <code>Global.gd</code>.</p>
+        <ul>
+            <li><strong>Auto-Ataque:</strong> Las armas tienen un controlador independiente (<code>weapon_controller.gd</code>) que calcula ángulos, disparos radiales o en línea, y detecta automáticamente al enemigo más cercano.</li>
+            <li><strong>Optimización (NavMesh):</strong> Los enemigos no recalculan su ruta en cada frame. Usan un <code>NavigationAgent2D</code> con un <em>timer desincronizado</em> (0.3s a 0.6s) que evita cuellos de botella severos de CPU en la horda masiva.</li>
+            <li><strong>Interfaz Reactiva (HUD):</strong> Se comunica por <em>señales</em> para actualizar barras, niveles y el inventario, manteniendo el código limpio.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>🦸‍♂️ El Jugador</h2>
+        <p>El jugador tiene físicas 2D (CharacterBody2D) con un control top-down suave y mecánicas defensivas.</p>
+        <div class="grid">
+            <div class="item-box">
+                <div class="item-title">Dash (Esquive)</div>
+                <div class="item-desc">Movimiento rápido con cooldown. Puede almacenar cargas múltiples y multiplicar su distancia/velocidad.</div>
+            </div>
+            <div class="item-box">
+                <div class="item-title">I-Frames</div>
+                <div class="item-desc">Breve período de invulnerabilidad al recibir daño. Animación de parpadeo que aísla visualmente a los sprites sin romper el color de la UI.</div>
+            </div>
+            <div class="item-box">
+                <div class="item-title">Salud y Regen</div>
+                <div class="item-desc">Regeneración pasiva (0.2 HP/s) y daño escalonado. Números de daño (rojo), crítico (amarillo) y curación (verde) flotantes dinámicos con sistema anti-spam.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>⚔️ Armamento y Tomos (Stats)</h2>
+        <p>El límite actual es de <strong>3 Armas</strong> y <strong>5 Tomos</strong> simultáneos.</p>
+        <h3>Armas Disponibles</h3>
+        <ul>
+            <li><strong>Arco (Arrow):</strong> Proyectil recto estándar, apunta al enemigo más cercano.</li>
+            <li><strong>Hacha (Axe):</strong> Proyectil en arco parabólico tipo "Boomerang / Hueso de Castlevania" que cae.</li>
+            <li><strong>Bala (Bullet):</strong> Proyectil rapidísimo con poco knockback pero ideal para mantener la horda a raya.</li>
+            <li><strong>Aura:</strong> Daño constante en un área alrededor del jugador. Escala visual y numéricamente.</li>
+        </ul>
+        <h3>Tomos de Estadísticas Base</h3>
+        <p>Pueden aparecer al subir de nivel y mejoran exponencialmente a las armas: Daño, Cantidad, Empuje, Tamaño, Suerte, Vel. de Ataque, Regen y Vel. de Proyectiles.</p>
+    </div>
+
+    <div class="card">
+        <h2><img src="ExpGem/Assets/exp_gem.png" alt="Gema" class="asset-img" style="margin-right: 5px;"> Sistema de Cofres (23 Objetos)</h2>
+        <p>Los enemigos sueltan Monedas, que pueden usarse para abrir cofres. El costo de los cofres sube exponencialmente. Los objetos tienen <strong>4 Rarezas (Tiers)</strong>. La probabilidad de obtener algo raro escala directamente con tu stat de <strong>Suerte</strong>.</p>
+        
+        <div class="grid">
+            <!-- Comunes -->
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Moneda de la Suerte</div><div class="item-desc">+2% prob. de Oro Doble.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Ganzúa Rota</div><div class="item-desc">+1% prob. de Cofre Gratis.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Botas Ligeras</div><div class="item-desc">+10% velocidad de movimiento.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Venda Sucia</div><div class="item-desc">+10 Salud Máxima e incluye curación instantánea.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Piedra de Afilar</div><div class="item-desc">+3% Velocidad de Ataque.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Pluma Ligera</div><div class="item-desc">+5% Velocidad de Proyectiles.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Rodillera de Madera</div><div class="item-desc">+2% Reducción de Daño.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Herradura Vieja</div><div class="item-desc">+2 Suerte Plana.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Amuleto de Cobre</div><div class="item-desc">+0.2 Regeneración Pasiva.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Guante de Boxeo</div><div class="item-desc">+5% Fuerza de empuje.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Levadura Mágica</div><div class="item-desc">+5% Tamaño a las armas.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Punta de Lanza</div><div class="item-desc">Daño Crítico base +0.1x.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Gafas de Estudiante</div><div class="item-desc">+3% de Experiencia ganada.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Cupón Arrugado</div><div class="item-desc">-2% costo de los cofres.</div></div>
+            <div class="item-box tier-common"><span class="tier-badge badge-common">Común</span><div class="item-title">Diente de Murciélago</div><div class="item-desc">Matar enemigos tiene 1% prob. de curar 1 PV.</div></div>
+
+            <!-- Raros -->
+            <div class="item-box tier-rare"><span class="tier-badge badge-rare">Raro</span><div class="item-title">Mochila de Cuero</div><div class="item-desc">+1 Proyectil a todas las armas.</div></div>
+            <div class="item-box tier-rare"><span class="tier-badge badge-rare">Raro</span><div class="item-title">Anillo Magnético</div><div class="item-desc">+15% área de recolección de exp.</div></div>
+            <div class="item-box tier-rare"><span class="tier-badge badge-rare">Raro</span><div class="item-title">Yunque Pequeño</div><div class="item-desc">+2 Daño base plano.</div></div>
+            <div class="item-box tier-rare"><span class="tier-badge badge-rare">Raro</span><div class="item-title">Resorte Oxidado</div><div class="item-desc">+10% distancia y velocidad de Dash.</div></div>
+
+            <!-- Épicos -->
+            <div class="item-box tier-epic"><span class="tier-badge badge-epic">Épico</span><div class="item-title">Lente de Aumento</div><div class="item-desc">+2% prob. Crítico.</div></div>
+            <div class="item-box tier-epic"><span class="tier-badge badge-epic">Épico</span><div class="item-title">Reloj de Bolsillo</div><div class="item-desc">+15% tiempo de invulnerabilidad.</div></div>
+            <div class="item-box tier-epic"><span class="tier-badge badge-epic">Épico</span><div class="item-title">Armadura de Espinas</div><div class="item-desc">Devuelve 50% del daño recibido.</div></div>
+
+            <!-- Legendarios -->
+            <div class="item-box tier-legendary"><span class="tier-badge badge-legendary">Único Legendario</span><div class="item-title">Guantes de Estática</div><div class="item-desc">10% prob. de crear cadenas de relámpagos al dañar.</div></div>
+            <div class="item-box tier-legendary"><span class="tier-badge badge-legendary">Único Legendario</span><div class="item-title">Espejo Roto</div><div class="item-desc">15% prob. de evadir por completo un golpe.</div></div>
+            <div class="item-box tier-legendary"><span class="tier-badge badge-legendary">Único Legendario</span><div class="item-title">Lámpara Sobrecargada</div><div class="item-desc">Duplica los procs de los objetos únicos.</div></div>
+            <div class="item-box tier-legendary"><span class="tier-badge badge-legendary">Único Legendario</span><div class="item-title">Botas de Plomo</div><div class="item-desc">Inmunidad absoluta al empuje enemigo, a costa de 5% velocidad.</div></div>
+            <div class="item-box tier-legendary"><span class="tier-badge badge-legendary">Único Legendario</span><div class="item-title">Batería Portátil</div><div class="item-desc">+1 carga máxima para el Dash.</div></div>
+            <div class="item-box tier-legendary"><span class="tier-badge badge-legendary">Único Legendario</span><div class="item-title">Imán Sobrecargado</div><div class="item-desc">Las gemas perdidas fuera de pantalla viajan mágicamente hacia vos.</div></div>
+            <div class="item-box tier-legendary"><span class="tier-badge badge-legendary">Único Legendario</span><div class="item-title">Pacto de Sangre</div><div class="item-desc">+50% daño total multiplicativo, pero anula la regeneración natural.</div></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>👾 Ecosistema de Enemigos</h2>
+        <p>Los enemigos no son estáticos, escalan con el paso de los minutos y hay distintas clases:</p>
+        <ul>
+            <li><strong>Básico:</strong> Salud base, velocidad promedio. Escala HP por minuto.</li>
+            <li><strong>Runner (Corredor):</strong> Pequeños y rojizos, tienen poca HP y resistencia al empuje reducida, pero son muy rápidos.</li>
+            <li><strong>Élite:</strong> Gigantes, lentos y durísimos. Sueltan Oro x15 y un anillo de 5 gemas de experiencia al morir.</li>
+        </ul>
+        <p>Todos tienen físicas reales: <em>interactúan y chocan entre ellos</em> de forma dinámica, empujándose mutuamente en vez de apilarse en el mismo píxel, generando formaciones orgánicas.</p>
+    </div>
+
+    <div class="card">
+        <h2>🖼️ Galería de Assets</h2>
+        <p>A continuación se muestran los recursos visuales actuales implementados en el proyecto (Pixel Art):</p>
+        
+        <h3>Protagonista (Orco)</h3>
+        <div class="asset-grid">
+            <div class="asset-item">
+                <img src="Player/Assets/Orc_Idle.png" alt="Orco Idle" class="gallery-img">
+                <div class="asset-name">Animación: Idle</div>
+            </div>
+            <div class="asset-item">
+                <img src="Player/Assets/Orc_Walk.png" alt="Orco Walk" class="gallery-img">
+                <div class="asset-name">Animación: Caminar</div>
+            </div>
+            <div class="asset-item">
+                <img src="Player/Assets/Orc_Hit.png" alt="Orco Hit" class="gallery-img">
+                <div class="asset-name">Animación: Recibir Daño</div>
+            </div>
+        </div>
+
+        <h3>Entorno y Naturaleza</h3>
+        <div class="asset-grid">
+            <div class="asset-item">
+                <img src="Assets/Enviroment/grass01.png" alt="Pasto" class="gallery-img">
+                <div class="asset-name">Pasto (Variante 1)</div>
+            </div>
+            <div class="asset-item">
+                <img src="Assets/Enviroment/grass02.png" alt="Pasto" class="gallery-img">
+                <div class="asset-name">Pasto (Variante 2)</div>
+            </div>
+            <div class="asset-item">
+                <img src="Assets/Trees/Flower_tree1.png" alt="Árbol" class="gallery-img">
+                <div class="asset-name">Árbol con Flores</div>
+            </div>
+            <div class="asset-item">
+                <img src="Assets/Trees/Burned_tree1.png" alt="Árbol Quemado" class="gallery-img">
+                <div class="asset-name">Árbol Quemado</div>
+            </div>
+            <div class="asset-item">
+                <img src="Assets/Trees/Broken_tree1.png" alt="Árbol Roto" class="gallery-img">
+                <div class="asset-name">Tronco Roto</div>
+            </div>
+            <div class="asset-item">
+                <img src="WorldProps/StoneWorldProps/rock.png" alt="Roca" class="gallery-img">
+                <div class="asset-name">Roca Base</div>
+            </div>
+        </div>
+
+        <h3>Objetos Interactivos</h3>
+        <div class="asset-grid">
+            <div class="asset-item">
+                <img src="ExpGem/Assets/exp_gem.png" alt="Gema de Exp" class="gallery-img">
+                <div class="asset-name">Gema de Experiencia</div>
+            </div>
+            <div class="asset-item">
+                <img src="Structures/Magnet/magnet.png" alt="Imán" class="gallery-img">
+                <div class="asset-name">Estructura: Imán Atractor</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

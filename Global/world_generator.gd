@@ -51,10 +51,18 @@ func generate_world():
 		add_child(magnet)
 
 	if chest_scene:
-		for i in range(50):
+		# Cofres normales
+		for i in range(45):
 			var chest = chest_scene.instantiate()
 			chest.position = Vector2(randf_range(-half, half), randf_range(-half, half))
 			add_child(chest)
+			
+		# Cofres dorados (raros)
+		for i in range(5):
+			var golden_chest = chest_scene.instantiate()
+			golden_chest.position = Vector2(randf_range(-half, half), randf_range(-half, half))
+			golden_chest.is_golden = true
+			add_child(golden_chest)
 
 func _spawn_grass_patches(half: float) -> void:
 	var patch_textures = [

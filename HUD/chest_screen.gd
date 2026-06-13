@@ -249,35 +249,23 @@ func show_chest():
 			continue # Ya lo tiene, no lo ofrecemos de nuevo
 		available_items.append(item_id)
 		
-	var selected_options = []
-	for i in range(3):
-		if available_items.is_empty():
-			break
+	if available_items.is_empty():
+		_close()
+		return
 			
-		var target_tier = _roll_tier()
-		var tier_pool = []
-		
-		for item_id in available_items:
-			if ITEM_DATA[item_id].get("tier", "common") == target_tier:
-				tier_pool.append(item_id)
-				
-		if tier_pool.is_empty():
-			tier_pool = available_items
-			
-		var chosen_item = tier_pool.pick_random()
-		selected_options.append(chosen_item)
-		available_items.erase(chosen_item)
+	var target_tier = _roll_tier()
+	var tier_pool = []
 	
-	for item_id in selected_options:
-		hbox.add_child(_create_card(item_id))
+	for item_id in available_items:
+		if ITEM_DATA[item_id].get("tier", "common") == target_tier:
+			tier_pool.append(item_id)
+			
+	if tier_pool.is_empty():
+		tier_pool = available_items
 		
-	var skip_btn := Button.new()
-	skip_btn.text = "CERRAR / NINGUNO"
-	skip_btn.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
-	skip_btn.position = Vector2(-150, -100)
-	skip_btn.size = Vector2(300, 50)
-	skip_btn.pressed.connect(func(): _close())
-	add_child(skip_btn)
+	var chosen_item = tier_pool.pick_random()
+	
+	hbox.add_child(_create_card(chosen_item))
 	
 	show()
 
@@ -316,10 +304,19 @@ func _create_card(item_id: String) -> Control:
 	vbox.add_theme_constant_override("separation", 10)
 	panel.add_child(vbox)
 	
-	var icon := ColorRect.new()
-	icon.color = data["color"]
-	icon.custom_minimum_size = Vector2(260, 110)
-	vbox.add_child(icon)
+	var icon_tex = _get_item_texture(item_id)
+	if icon_tex:
+		var tex_rect = TextureRect.new()
+		tex_rect.texture = icon_tex
+		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_rect.custom_minimum_size = Vector2(260, 110)
+		vbox.add_child(tex_rect)
+	else:
+		var icon = ColorRect.new()
+		icon.color = data["color"]
+		icon.custom_minimum_size = Vector2(260, 110)
+		vbox.add_child(icon)
 	
 	var name_label := Label.new()
 	name_label.text = tier_name + " " + data["name"]
@@ -337,7 +334,7 @@ func _create_card(item_id: String) -> Control:
 	vbox.add_child(desc_label)
 	
 	var btn := Button.new()
-	btn.text = "TOMAR OBJETO"
+	btn.text = "CONTINUAR"
 	btn.pressed.connect(func(): _on_item_selected(item_id))
 	vbox.add_child(btn)
 	
@@ -346,6 +343,20 @@ func _create_card(item_id: String) -> Control:
 func _on_item_selected(item_id: String):
 	Global.add_item(item_id)
 	_close()
+
+func _get_item_texture(item_id: String) -> Texture2D:
+	var path = "res://Assets/Items/" + item_id + ".png"
+	
+	if ResourceLoader.exists(path):
+		var tex = load(path) as Texture2D
+		if tex: return tex
+		
+	if FileAccess.file_exists(path):
+		var img = Image.load_from_file(ProjectSettings.globalize_path(path))
+		if img:
+			return ImageTexture.create_from_image(img)
+			
+	return null
 
 func _close():
 	for child in get_children():
