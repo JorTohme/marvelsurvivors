@@ -345,7 +345,7 @@ func _on_item_selected(item_id: String):
 	_close()
 
 func _get_item_texture(item_id: String) -> Texture2D:
-	var path = "res://Assets/Items/" + item_id + ".png"
+	var path = "res://Assets/Items/" + item_id + ".jpg"
 	
 	if ResourceLoader.exists(path):
 		var tex = load(path) as Texture2D
