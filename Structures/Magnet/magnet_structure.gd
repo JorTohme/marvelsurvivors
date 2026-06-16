@@ -1,6 +1,7 @@
 extends Area2D
 
 var player_in_range = null
+var is_used = false
 
 @onready var sprite = $Sprite2D 
 
@@ -20,7 +21,7 @@ func _ready():
 	sprite.material.set_shader_parameter("line_thickness", -1.0)
 
 func _input(event):
-	if player_in_range and event.is_action_pressed("interact"):
+	if not is_used and player_in_range and event.is_action_pressed("interact"):
 		activate_magnet()
 
 func activate_magnet():
@@ -31,11 +32,14 @@ func activate_magnet():
 		if is_instance_valid(gem):
 			gem.start_collection_animation(player_in_range)
 	
-	queue_free()
+	
+	is_used = true
+	sprite.modulate = Color(0.3, 0.3, 0.3)
+	sprite.material.set_shader_parameter("line_thickness", 0.0)
 
 
 func _on_body_entered(body):
-	if body.is_in_group("player"):
+	if not is_used and body.is_in_group("player"):
 		player_in_range = body
 		sprite.material.set_shader_parameter("line_thickness", 25.0)
 

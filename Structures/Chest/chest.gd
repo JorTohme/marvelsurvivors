@@ -2,6 +2,7 @@ extends Area2D
 
 @onready var sprite = $Sprite2D
 @onready var prompt_label = $PromptLabel
+var outline_shader = preload("res://Structures/Magnet/MagnetStructure.gdshader")
 
 var player_in_range = false
 var is_open = false
@@ -11,7 +12,13 @@ var is_open = false
 func _ready():
 	prompt_label.visible = false
 	sprite.modulate = Color(1, 1, 1, 1) # Resetear el tinte del sprite por defecto
-	sprite.scale = Vector2(0.12, 0.12) # Achicamos la imagen generada (de 1024x1024 a ~120px)
+	sprite.scale = Vector2(0.22, 0.22) # Escala ajustada, era muy chica antes
+	
+	var mat = ShaderMaterial.new()
+	mat.shader = outline_shader
+	mat.set_shader_parameter("line_color", Color(1,1,1,1))
+	mat.set_shader_parameter("line_thickness", -1.0)
+	sprite.material = mat
 	
 	var path = "res://Structures/Chest/golden_chest.png" if is_golden else "res://Structures/Chest/normal_chest.png"
 	if ResourceLoader.exists(path):
@@ -46,6 +53,7 @@ func _try_open_chest(cost: int):
 		Global.chests_opened += 1
 		prompt_label.visible = false
 		sprite.modulate = Color(0.5, 0.5, 0.5) # Feedback visual de abierto
+		sprite.material.set_shader_parameter("line_thickness", -1.0)
 		
 		# Mostrar la UI del cofre
 		var screen = get_tree().get_first_node_in_group("chest_screen")
@@ -58,8 +66,10 @@ func _on_body_entered(body):
 	if not is_open and body.is_in_group("player"):
 		player_in_range = true
 		prompt_label.visible = true
+		sprite.material.set_shader_parameter("line_thickness", 25.0)
 
 func _on_body_exited(body):
 	if body.is_in_group("player"):
 		player_in_range = false
 		prompt_label.visible = false
+		sprite.material.set_shader_parameter("line_thickness", -1.0)
