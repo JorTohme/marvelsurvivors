@@ -10,10 +10,14 @@ var is_open = false
 
 func _ready():
 	prompt_label.visible = false
-	prompt_label.text = ""
+	sprite.modulate = Color(1, 1, 1, 1) # Resetear el tinte del sprite por defecto
+	sprite.scale = Vector2(0.12, 0.12) # Achicamos la imagen generada (de 1024x1024 a ~120px)
 	
 	if is_golden:
-		sprite.modulate = Color(1.0, 0.84, 0.0) # Color dorado brillante
+		sprite.texture = load("res://Structures/Chest/golden_chest.png")
+		prompt_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.0))
+	else:
+		sprite.texture = load("res://Structures/Chest/normal_chest.png")
 	
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
