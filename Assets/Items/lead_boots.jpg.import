@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bod0ncxqnkwll"
-path="res://.godot/imported/overloaded_magnet.png-bbae0e27c0b287113d12c716008c5987.ctex"
+uid="uid://brbkorvab025y"
+path="res://.godot/imported/lead_boots.jpg-ea1942f2346d30022c1d9db53341ec7c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/overloaded_magnet.png"
-dest_files=["res://.godot/imported/overloaded_magnet.png-bbae0e27c0b287113d12c716008c5987.ctex"]
+source_file="res://Assets/Items/lead_boots.jpg"
+dest_files=["res://.godot/imported/lead_boots.jpg-ea1942f2346d30022c1d9db53341ec7c.ctex"]
 
 [params]
 

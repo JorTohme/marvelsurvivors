@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bd6hsfkrbsu6t"
-path="res://.godot/imported/blood_pact.png-d80d3f93d1e7495f932c77f2ee60f6bd.ctex"
+uid="uid://c6cx7nkfeo85d"
+path="res://.godot/imported/lucky_coin.jpg-900d6e788347f05899a5b51fa07e02a7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/blood_pact.png"
-dest_files=["res://.godot/imported/blood_pact.png-d80d3f93d1e7495f932c77f2ee60f6bd.ctex"]
+source_file="res://Assets/Items/lucky_coin.jpg"
+dest_files=["res://.godot/imported/lucky_coin.jpg-900d6e788347f05899a5b51fa07e02a7.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bq6qrmep6hcu1"
-path="res://.godot/imported/backpack.png-841f80c7ea2b45dbdfe0297f7e6a9a08.ctex"
+uid="uid://cljs33of4navy"
+path="res://.godot/imported/overpowered_lamp.jpg-5c1768ffeb0a98dc4f27bd44db18ba60.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/backpack.png"
-dest_files=["res://.godot/imported/backpack.png-841f80c7ea2b45dbdfe0297f7e6a9a08.ctex"]
+source_file="res://Assets/Items/overpowered_lamp.jpg"
+dest_files=["res://.godot/imported/overpowered_lamp.jpg-5c1768ffeb0a98dc4f27bd44db18ba60.ctex"]
 
 [params]
 

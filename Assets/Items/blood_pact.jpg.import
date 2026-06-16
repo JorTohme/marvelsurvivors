@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://otjb38hsjbk1"
-path="res://.godot/imported/overpowered_lamp.png-b9114ff95000ff89d189bfb6f9d1408c.ctex"
+uid="uid://br2ulhcby1sfc"
+path="res://.godot/imported/blood_pact.jpg-b0857734b72c196daed6d931d7f51f37.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/overpowered_lamp.png"
-dest_files=["res://.godot/imported/overpowered_lamp.png-b9114ff95000ff89d189bfb6f9d1408c.ctex"]
+source_file="res://Assets/Items/blood_pact.jpg"
+dest_files=["res://.godot/imported/blood_pact.jpg-b0857734b72c196daed6d931d7f51f37.ctex"]
 
 [params]
 

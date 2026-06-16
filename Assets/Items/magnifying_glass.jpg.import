@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5j0avhbj2qsd"
-path="res://.godot/imported/lucky_coin.png-a0217be9e0c2ae7f7c6395bfd6c26984.ctex"
+uid="uid://b06u1hmp1srf4"
+path="res://.godot/imported/magnifying_glass.jpg-cc0a5570889e40b11e10759bcd8a7a33.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/lucky_coin.png"
-dest_files=["res://.godot/imported/lucky_coin.png-a0217be9e0c2ae7f7c6395bfd6c26984.ctex"]
+source_file="res://Assets/Items/magnifying_glass.jpg"
+dest_files=["res://.godot/imported/magnifying_glass.jpg-cc0a5570889e40b11e10759bcd8a7a33.ctex"]
 
 [params]
 

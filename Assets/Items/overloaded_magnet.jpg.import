@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b01ev0bi36l61"
-path="res://.godot/imported/rusty_spring.png-1763f7e996c068c53e0a4071a03a3104.ctex"
+uid="uid://d00bvguaw5td0"
+path="res://.godot/imported/overloaded_magnet.jpg-766b41dff754435edf470c9c03bb0967.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/rusty_spring.png"
-dest_files=["res://.godot/imported/rusty_spring.png-1763f7e996c068c53e0a4071a03a3104.ctex"]
+source_file="res://Assets/Items/overloaded_magnet.jpg"
+dest_files=["res://.godot/imported/overloaded_magnet.jpg-766b41dff754435edf470c9c03bb0967.ctex"]
 
 [params]
 

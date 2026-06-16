@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cxbdb3p3hxvou"
-path="res://.godot/imported/magnet_ring.png-0f1a572d43e5ee4f36ed7eb65e1ccafa.ctex"
+uid="uid://36gm2yapamue"
+path="res://.godot/imported/rusty_spring.jpg-96f4e3a263d8ef51cdf7a2be922f579e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/magnet_ring.png"
-dest_files=["res://.godot/imported/magnet_ring.png-0f1a572d43e5ee4f36ed7eb65e1ccafa.ctex"]
+source_file="res://Assets/Items/rusty_spring.jpg"
+dest_files=["res://.godot/imported/rusty_spring.jpg-96f4e3a263d8ef51cdf7a2be922f579e.ctex"]
 
 [params]
 

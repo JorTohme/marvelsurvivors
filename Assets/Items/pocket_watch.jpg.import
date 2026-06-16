@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgw20cxkhopl5"
-path="res://.godot/imported/magnifying_glass.png-f5c9c89fb7a36a74458a69d1fe0a96be.ctex"
+uid="uid://cell8q21dnxao"
+path="res://.godot/imported/pocket_watch.jpg-7b6cb86d364c657f668e52036c8fb643.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/magnifying_glass.png"
-dest_files=["res://.godot/imported/magnifying_glass.png-f5c9c89fb7a36a74458a69d1fe0a96be.ctex"]
+source_file="res://Assets/Items/pocket_watch.jpg"
+dest_files=["res://.godot/imported/pocket_watch.jpg-7b6cb86d364c657f668e52036c8fb643.ctex"]
 
 [params]
 

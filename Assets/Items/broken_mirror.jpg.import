@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtbcmuqy62yc5"
-path="res://.godot/imported/broken_mirror.png-55b912b00f0c11f2c69a1fcf91b09cde.ctex"
+uid="uid://dme4bit4d1s62"
+path="res://.godot/imported/broken_mirror.jpg-ca8319c06b0ebf13f80206a761095004.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/broken_mirror.png"
-dest_files=["res://.godot/imported/broken_mirror.png-55b912b00f0c11f2c69a1fcf91b09cde.ctex"]
+source_file="res://Assets/Items/broken_mirror.jpg"
+dest_files=["res://.godot/imported/broken_mirror.jpg-ca8319c06b0ebf13f80206a761095004.ctex"]
 
 [params]
 

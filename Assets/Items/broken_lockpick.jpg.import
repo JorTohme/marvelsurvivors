@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b81h4o05mj4od"
-path="res://.godot/imported/portable_battery.png-db2fa90a8c0bde6cc8e806ea2cd5c06d.ctex"
+uid="uid://bfg8pd5f5to77"
+path="res://.godot/imported/broken_lockpick.jpg-9faf4db4c0bda9abb6ea21ed87414fe2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/portable_battery.png"
-dest_files=["res://.godot/imported/portable_battery.png-db2fa90a8c0bde6cc8e806ea2cd5c06d.ctex"]
+source_file="res://Assets/Items/broken_lockpick.jpg"
+dest_files=["res://.godot/imported/broken_lockpick.jpg-9faf4db4c0bda9abb6ea21ed87414fe2.ctex"]
 
 [params]
 

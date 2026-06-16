@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cldxor8l0b1sq"
-path="res://.godot/imported/lead_boots.png-c8044b2cf798ec801e674703a09bba4a.ctex"
+uid="uid://csrey7ocji4ei"
+path="res://.godot/imported/static_gloves.jpg-1958e4937cc320718484d85681253cc0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/lead_boots.png"
-dest_files=["res://.godot/imported/lead_boots.png-c8044b2cf798ec801e674703a09bba4a.ctex"]
+source_file="res://Assets/Items/static_gloves.jpg"
+dest_files=["res://.godot/imported/static_gloves.jpg-1958e4937cc320718484d85681253cc0.ctex"]
 
 [params]
 

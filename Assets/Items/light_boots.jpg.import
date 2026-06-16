@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ii6ctw50cfrn"
-path="res://.godot/imported/static_gloves.png-c774214625616b59808b09ea2e61870e.ctex"
+uid="uid://bvd0igys2e8ak"
+path="res://.godot/imported/light_boots.jpg-0da5842ffaf1dad257a869fbbdbcb7f0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/static_gloves.png"
-dest_files=["res://.godot/imported/static_gloves.png-c774214625616b59808b09ea2e61870e.ctex"]
+source_file="res://Assets/Items/light_boots.jpg"
+dest_files=["res://.godot/imported/light_boots.jpg-0da5842ffaf1dad257a869fbbdbcb7f0.ctex"]
 
 [params]
 

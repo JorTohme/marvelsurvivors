@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8pa8e86q68yu"
-path="res://.godot/imported/anvil.png-e95498383425edab296e38707650d0f8.ctex"
+uid="uid://dwsnmkrv0t37v"
+path="res://.godot/imported/anvil.jpg-4956d75a4d00ec3a5bf58d087f579380.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Items/anvil.png"
-dest_files=["res://.godot/imported/anvil.png-e95498383425edab296e38707650d0f8.ctex"]
+source_file="res://Assets/Items/anvil.jpg"
+dest_files=["res://.godot/imported/anvil.jpg-4956d75a4d00ec3a5bf58d087f579380.ctex"]
 
 [params]
 
