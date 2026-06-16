@@ -8,6 +8,15 @@ func _ready():
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	
+	var path = "res://Structures/Magnet/magnet.png"
+	if ResourceLoader.exists(path):
+		sprite.texture = load(path)
+	elif FileAccess.file_exists(path):
+		var img = Image.load_from_file(ProjectSettings.globalize_path(path))
+		if img:
+			sprite.texture = ImageTexture.create_from_image(img)
+			
+	sprite.scale = Vector2(0.12, 0.12) # Ajustar la escala de 1024x1024 a ~120px
 	sprite.material.set_shader_parameter("line_thickness", -1.0)
 
 func _input(event):

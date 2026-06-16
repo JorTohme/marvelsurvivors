@@ -13,11 +13,16 @@ func _ready():
 	sprite.modulate = Color(1, 1, 1, 1) # Resetear el tinte del sprite por defecto
 	sprite.scale = Vector2(0.12, 0.12) # Achicamos la imagen generada (de 1024x1024 a ~120px)
 	
+	var path = "res://Structures/Chest/golden_chest.png" if is_golden else "res://Structures/Chest/normal_chest.png"
+	if ResourceLoader.exists(path):
+		sprite.texture = load(path)
+	elif FileAccess.file_exists(path):
+		var img = Image.load_from_file(ProjectSettings.globalize_path(path))
+		if img:
+			sprite.texture = ImageTexture.create_from_image(img)
+	
 	if is_golden:
-		sprite.texture = load("res://Structures/Chest/golden_chest.png")
 		prompt_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.0))
-	else:
-		sprite.texture = load("res://Structures/Chest/normal_chest.png")
 	
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
