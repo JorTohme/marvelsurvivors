@@ -20,7 +20,7 @@ func _ready():
 	mat.set_shader_parameter("line_thickness", -1.0)
 	sprite.material = mat
 	
-	var path = "res://Structures/Chest/golden_chest.png" if is_golden else "res://Structures/Chest/normal_chest.png"
+	var path = "res://Structures/Chest/normal_chest.png"
 	if ResourceLoader.exists(path):
 		sprite.texture = load(path)
 	elif FileAccess.file_exists(path):
@@ -30,6 +30,7 @@ func _ready():
 	
 	if is_golden:
 		prompt_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.0))
+		sprite.material.set_shader_parameter("line_thickness", 25.0)
 	
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
@@ -72,4 +73,5 @@ func _on_body_exited(body):
 	if body.is_in_group("player"):
 		player_in_range = false
 		prompt_label.visible = false
-		sprite.material.set_shader_parameter("line_thickness", -1.0)
+		if not is_golden and not is_open:
+			sprite.material.set_shader_parameter("line_thickness", -1.0)
