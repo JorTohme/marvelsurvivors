@@ -1,13 +1,14 @@
 [gd_scene load_steps=35 format=3 uid="uid://b8yl0r20mmm34"]
 
 [ext_resource type="Script" uid="uid://blit2ipuo6hd" path="res://Player/player.gd" id="1_i3pqv"]
-[ext_resource type="Texture2D" uid="uid://dxyiobfunbyt" path="res://Player/Assets/Orc_Hit.png" id="2_fhl08"]
-[ext_resource type="Texture2D" uid="uid://d2lkvb1ftg5hn" path="res://Player/Assets/Orc_Idle.png" id="3_btcbx"]
-[ext_resource type="Texture2D" uid="uid://brp1mm8ajj863" path="res://Player/Assets/Orc_Walk.png" id="4_gwnis"]
+[ext_resource type="Texture2D" uid="uid://dsx6qdb2lsuto" path="res://Player/Assets/Player_Hit.png" id="2_fhl08"]
+[ext_resource type="Texture2D" uid="uid://bdpc8m3kci71e" path="res://Player/Assets/Player_Idle.png" id="3_btcbx"]
+[ext_resource type="Texture2D" uid="uid://k4dgpdli4bfh" path="res://Player/Assets/Player_Walk.png" id="4_gwnis"]
 [ext_resource type="PackedScene" uid="uid://b02r1e7khyw2q" path="res://Player/WeaponController.tscn" id="5_fhl08"]
 [ext_resource type="Texture2D" uid="uid://c7u8pbt0nffbb" path="res://Player/Assets/Orc-shadow.png" id="5_k53q1"]
 [ext_resource type="Script" uid="uid://b55ajy8mmdb4p" path="res://Player/weapon_manager.gd" id="6_od3ui"]
 [ext_resource type="PackedScene" uid="uid://ctq47w4ki81ts" path="res://Weapons/Bullet/bullet.tscn" id="9_x3vf3"]
+[ext_resource type="PackedScene" uid="uid://bs3mofn6fv16k" path="res://Weapons/Axe/Axe.tscn" id="10_axe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o28un"]
 atlas = ExtResource("2_fhl08")
@@ -73,18 +74,6 @@ region = Rect2(300, 0, 100, 100)
 atlas = ExtResource("4_gwnis")
 region = Rect2(400, 0, 100, 100)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gu6f8"]
-atlas = ExtResource("4_gwnis")
-region = Rect2(500, 0, 100, 100)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dkpta"]
-atlas = ExtResource("4_gwnis")
-region = Rect2(600, 0, 100, 100)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lfmf2"]
-atlas = ExtResource("4_gwnis")
-region = Rect2(700, 0, 100, 100)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_00tjw"]
 animations = [{
 "frames": [{
@@ -145,15 +134,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_p5o4e")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gu6f8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dkpta")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lfmf2")
 }],
 "loop": true,
 "name": &"run",
@@ -233,7 +213,7 @@ script = ExtResource("6_od3ui")
 controller_scene = ExtResource("5_fhl08")
 
 [node name="WeaponController" parent="Weapons" instance=ExtResource("5_fhl08")]
-weapon_scene = ExtResource("9_x3vf3")
+weapon_scene = ExtResource("10_axe")
 projectile_count = 1
 
 [node name="HealthBar" type="ProgressBar" parent="."]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7m3tm0faq44f"
-path="res://.godot/imported/golden_chest.png-fc3cd8f8ba4e757962ddc90f5132bd4d.ctex"
+uid="uid://dug4843tbwmk3"
+path="res://.godot/imported/bullet_square.png-8ab155eb0259c81882f632afdf31b425.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Structures/Chest/golden_chest.png"
-dest_files=["res://.godot/imported/golden_chest.png-fc3cd8f8ba4e757962ddc90f5132bd4d.ctex"]
+source_file="res://Weapons/Bullet/bullet_square.png"
+dest_files=["res://.godot/imported/bullet_square.png-8ab155eb0259c81882f632afdf31b425.ctex"]
 
 [params]
 

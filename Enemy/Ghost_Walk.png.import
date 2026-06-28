@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvjmvuv0x6gsa"
-path="res://.godot/imported/normal_chest.png-46c8012336a6e9d6d1b9d486f3c375c6.ctex"
+uid="uid://b5tevvi7i0mn0"
+path="res://.godot/imported/Ghost_Walk.png-143b5af3061dc8fdde87bc88824f9410.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Structures/Chest/normal_chest.png"
-dest_files=["res://.godot/imported/normal_chest.png-46c8012336a6e9d6d1b9d486f3c375c6.ctex"]
+source_file="res://Enemy/Ghost_Walk.png"
+dest_files=["res://.godot/imported/Ghost_Walk.png-143b5af3061dc8fdde87bc88824f9410.ctex"]
 
 [params]
 

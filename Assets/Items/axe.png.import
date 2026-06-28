@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvjmvuv0x6gsa"
-path="res://.godot/imported/normal_chest.png-46c8012336a6e9d6d1b9d486f3c375c6.ctex"
+uid="uid://bsdkmtgs8dmqm"
+path="res://.godot/imported/axe.png-53e8bd86d410cd8bec8e0235f0d45bac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Structures/Chest/normal_chest.png"
-dest_files=["res://.godot/imported/normal_chest.png-46c8012336a6e9d6d1b9d486f3c375c6.ctex"]
+source_file="res://Assets/Items/axe.png"
+dest_files=["res://.godot/imported/axe.png-53e8bd86d410cd8bec8e0235f0d45bac.ctex"]
 
 [params]
 

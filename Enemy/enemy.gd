@@ -27,6 +27,8 @@ var is_dying: bool = false
 var is_elite: bool = false
 var is_runner: bool = false
 var is_caster: bool = false
+var is_miniboss: bool = false
+var is_boss: bool = false
 var is_casting: bool = false
 var cast_cooldown: float = 4.0
 var cast_timer: float = 2.0
@@ -130,7 +132,30 @@ func make_runner():
 	scale = Vector2(0.35, 0.35) # Reducimos el tamaño para hacerlo más pequeño y rápido
 	speed = 260.0 # Aumentamos la velocidad
 	knockback_resistance = 2.0 # Reducimos la resistencia para que salga volando más fácil
-	modulate = Color(1.0, 0.6, 0.6) # Color rojizo para destacar visualmente
+	modulate = base_color
+	
+	var sf = SpriteFrames.new()
+	var tex = load("res://Enemy/Ghost_Walk.png")
+	sf.add_animation("idle")
+	sf.add_animation("run")
+	sf.add_animation("hit")
+	sf.set_animation_loop("idle", true)
+	sf.set_animation_speed("idle", 8.0)
+	sf.set_animation_loop("run", true)
+	sf.set_animation_speed("run", 12.0)
+	
+	for i in range(6):
+		var atlas = AtlasTexture.new()
+		atlas.atlas = tex
+		var x_pos = i * 100
+		if i == 5:
+			x_pos = 480 # Corregimos el frame 5 que está desplazado 20px a la izquierda
+		atlas.region = Rect2(x_pos, 0, 100, 100)
+		sf.add_frame("idle", atlas)
+		sf.add_frame("run", atlas)
+		sf.add_frame("hit", atlas)
+		
+	$EnemyBodySprite.sprite_frames = sf
 
 func make_caster():
 	is_caster = true
@@ -138,15 +163,55 @@ func make_caster():
 	speed = 85.0
 	knockback_resistance = 15.0
 
+func make_miniboss():
+	is_miniboss = true
+	is_caster = true
+	is_elite = true
+	scale = Vector2(2.0, 2.0)
+	modulate = Color(1.0, 0.6, 0.0) # Naranja claro
+	health = 800.0
+	knockback_resistance = 200.0
+	speed = 120.0
+	cast_cooldown = 3.0
+
+func make_boss():
+	is_boss = true
+	is_caster = true
+	is_elite = true
+	scale = Vector2(3.0, 3.0)
+	modulate = Color(1.0, 0.2, 0.2) # Rojo fuerte
+	health = 2500.0
+	knockback_resistance = 500.0
+	speed = 150.0
+	cast_cooldown = 2.5
+
 func _start_cast():
 	is_casting = true
 	cast_timer = cast_cooldown
 	anim_body.play("idle")
 	anim_shadow.play("idle")
 	
-	var explosion = explosion_scene.instantiate()
-	explosion.global_position = player_ref.global_position
-	get_tree().current_scene.add_child(explosion)
+	if is_boss:
+		# Circulo de explosiones a su alrededor
+		var count = 12
+		var radius = 200.0
+		for i in range(count):
+			var angle = (float(i) / count) * TAU
+			var explosion = explosion_scene.instantiate()
+			explosion.global_position = global_position + Vector2(cos(angle), sin(angle)) * radius
+			get_tree().current_scene.add_child(explosion)
+	elif is_miniboss:
+		# Cruz (4 explosiones) a su alrededor
+		var offsets = [Vector2(0, 150), Vector2(0, -150), Vector2(150, 0), Vector2(-150, 0)]
+		for offset in offsets:
+			var explosion = explosion_scene.instantiate()
+			explosion.global_position = global_position + offset
+			get_tree().current_scene.add_child(explosion)
+	else:
+		var explosion = explosion_scene.instantiate()
+		explosion.global_position = player_ref.global_position
+		get_tree().current_scene.add_child(explosion)
+	
 	
 	await get_tree().create_timer(0.6).timeout
 	if is_instance_valid(self):

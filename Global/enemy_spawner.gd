@@ -7,9 +7,30 @@ extends Node2D
 @export var min_spawn_time: float = 0.5
 @export var time_reduction_per_minute: float = 0.15
 
+var superhorde_count: int = 0
+var next_superhorde_time: float = 5.0
+var miniboss_spawned: bool = false
+var boss_spawned: bool = false
+
 func _ready():
 	$Timer.wait_time = initial_spawn_time
 	$Timer.timeout.connect(_on_timer_timeout)
+
+func _process(delta):
+	var elapsed = Global.get_time_elapsed()
+	
+	if not miniboss_spawned and elapsed >= 1.0: # Minuto 5 (ahora a 1s para probar)
+		miniboss_spawned = true
+		_spawn_specific_boss("miniboss")
+		
+	if not boss_spawned and elapsed >= 2.0: # Minuto 8 (ahora a 2s para probar)
+		boss_spawned = true
+		_spawn_specific_boss("boss")
+		
+	if Global.time_left <= 0 and Global.overtime >= next_superhorde_time:
+		_spawn_super_horde()
+		superhorde_count += 1
+		next_superhorde_time += 40.0
 
 func _on_timer_timeout():
 	var player = get_tree().get_first_node_in_group("player")
@@ -108,3 +129,54 @@ func is_position_free(pos: Vector2) -> bool:
 	var result = space_state.intersect_point(query)
 	
 	return result.is_empty()
+
+func _spawn_super_horde():
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		var count = 120
+		var radius = 800.0
+		for i in range(count):
+			var angle = (float(i) / float(count)) * TAU
+			var spawn_pos = player.global_position + Vector2(cos(angle), sin(angle)) * radius
+			
+			var new_enemy = enemy_scene.instantiate()
+			
+			# Ajustamos si es necesario buscar una posición libre
+			var valid_pos = spawn_pos
+			for attempt in range(5):
+				if is_position_free(valid_pos):
+					break
+				valid_pos += Vector2(randf_range(-30, 30), randf_range(-30, 30))
+			
+			new_enemy.global_position = valid_pos
+			
+			if superhorde_count < 2:
+				new_enemy.make_runner()
+			
+			
+			get_tree().current_scene.add_child(new_enemy)
+			
+		initial_spawn_time = 0.2
+		min_spawn_time = 0.2
+		$Timer.wait_time = 0.2
+
+func _spawn_specific_boss(type: String):
+	var player = get_tree().get_first_node_in_group("player")
+	if player:
+		var spawn_pos = get_smart_spawn_position(player, 600.0, 800.0)
+		var new_enemy = enemy_scene.instantiate()
+		
+		var valid_pos = spawn_pos
+		for attempt in range(5):
+			if is_position_free(valid_pos):
+				break
+			valid_pos += Vector2(randf_range(-30, 30), randf_range(-30, 30))
+			
+		new_enemy.global_position = valid_pos
+		
+		if type == "miniboss":
+			new_enemy.make_miniboss()
+		elif type == "boss":
+			new_enemy.make_boss()
+			
+		get_tree().current_scene.add_child(new_enemy)
