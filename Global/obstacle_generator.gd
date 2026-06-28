@@ -14,24 +14,24 @@ var occupied_positions: Dictionary = {}
 
 var tree_families = [
 	[ # Burned
-		preload("res://Assets/trees/Burned_tree1.png"),
-		preload("res://Assets/trees/Burned_tree2.png"),
-		preload("res://Assets/trees/Burned_tree3.png")
+		preload("res://Assets/Trees/Burned_tree1.png"),
+		preload("res://Assets/Trees/Burned_tree2.png"),
+		preload("res://Assets/Trees/Burned_tree3.png")
 	],
 	[ # Flower
-		preload("res://Assets/trees/Flower_tree1.png"),
-		preload("res://Assets/trees/Flower_tree2.png"),
-		preload("res://Assets/trees/Flower_tree2-1.png")
+		preload("res://Assets/Trees/Flower_tree1.png"),
+		preload("res://Assets/Trees/Flower_tree2.png"),
+		preload("res://Assets/Trees/Flower_tree2-1.png")
 	],
 	[ # Fruit
-		preload("res://Assets/trees/Fruit_tree1.png"),
-		preload("res://Assets/trees/Fruit_tree2.png"),
-		preload("res://Assets/trees/Fruit_tree3.png")
+		preload("res://Assets/Trees/Fruit_tree1.png"),
+		preload("res://Assets/Trees/Fruit_tree2.png"),
+		preload("res://Assets/Trees/Fruit_tree3.png")
 	],
 	[ # Moss
-		preload("res://Assets/trees/Moss_tree1.png"),
-		preload("res://Assets/trees/Moss_tree2.png"),
-		preload("res://Assets/trees/Moss_tree3.png")
+		preload("res://Assets/Trees/Moss_tree1.png"),
+		preload("res://Assets/Trees/Moss_tree2.png"),
+		preload("res://Assets/Trees/Moss_tree3.png")
 	]
 ]
 
