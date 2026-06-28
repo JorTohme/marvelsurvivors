@@ -19,11 +19,11 @@ func _ready():
 func _process(delta):
 	var elapsed = Global.get_time_elapsed()
 	
-	if not miniboss_spawned and elapsed >= 1.0: # Minuto 5 (ahora a 1s para probar)
+	if not miniboss_spawned and elapsed >= 300.0: # Minuto 5
 		miniboss_spawned = true
 		_spawn_specific_boss("miniboss")
 		
-	if not boss_spawned and elapsed >= 2.0: # Minuto 8 (ahora a 2s para probar)
+	if not boss_spawned and elapsed >= 480.0: # Minuto 8
 		boss_spawned = true
 		_spawn_specific_boss("boss")
 		

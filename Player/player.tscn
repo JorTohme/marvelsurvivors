@@ -213,7 +213,7 @@ script = ExtResource("6_od3ui")
 controller_scene = ExtResource("5_fhl08")
 
 [node name="WeaponController" parent="Weapons" instance=ExtResource("5_fhl08")]
-weapon_scene = ExtResource("10_axe")
+weapon_scene = ExtResource("9_x3vf3")
 projectile_count = 1
 
 [node name="HealthBar" type="ProgressBar" parent="."]
